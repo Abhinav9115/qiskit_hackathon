@@ -1,0 +1,30 @@
+{
+  "platform_id": "platform_C",
+  "name": "Platform C (Embedded Edge / ARM Cortex-M Target)",
+  "description": "Embedded edge target profile specifying resource limits for low-power ARM Cortex-M / Raspberry Pi Zero class hardware.",
+  "target_architecture": "armv7l",
+  "cpu_allocation": {
+    "cores": 1.0,
+    "clock_frequency_mhz": 1000,
+    "emulation_tool": "qemu-user-static",
+    "pinning_command": "taskset -c 0"
+  },
+  "memory_allocation": {
+    "limit_bytes": 268435456,
+    "limit_human": "256 MB",
+    "swap_bytes": 0
+  },
+  "network_configuration": {
+    "interface": "eth0",
+    "mtu_bytes": 1500,
+    "added_latency_ms": 5.0,
+    "jitter_ms": 1.0,
+    "packet_loss_percent": 0.05
+  },
+  "benchmarking_parameters": {
+    "warmup_runs": 5,
+    "handshake_trials": 20,
+    "payload_trials": 10,
+    "payload_sizes_bytes": [1024, 102400]
+  }
+}

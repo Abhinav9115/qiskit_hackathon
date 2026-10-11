@@ -1,0 +1,17 @@
+{
+  "payload_1kb.bin": {
+    "size_bytes": 1024,
+    "sha256": "5c8c693ade80f07161f767a36aef1408be9f4a54609b1d6a5fa4fd08d49ba655",
+    "md5": "9473c1560b5d5c54aff0c941b027bf0c"
+  },
+  "payload_100kb.bin": {
+    "size_bytes": 102400,
+    "sha256": "200005ff97e711b8f3cf20078f3f914a674979248d5d86403bd028ae54dab80e",
+    "md5": "bfc194184e3298d51eaa1897c65c8063"
+  },
+  "payload_10mb.bin": {
+    "size_bytes": 10485760,
+    "sha256": "8c56c21712c76ed5625889a76cee69c31b5fd47f3461c2227ba270bf42fbcbe8",
+    "md5": "4a97e3ee206320a6f6df058404a4eebd"
+  }
+}

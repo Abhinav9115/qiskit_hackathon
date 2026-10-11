@@ -1,0 +1,32 @@
+{
+  "platform_id": "platform_D",
+  "name": "Platform D (Network Fragmentation & Bloat Emulator)",
+  "description": "Evaluates PQC wire bloat trade-offs under standard Ethernet MTU (1500 B) packet fragmentation and 15ms latency jitter via tc-netem.",
+  "target_architecture": "x86_64",
+  "cpu_allocation": {
+    "cores": 1.0,
+    "cgroup_cpu_quota_us": 100000,
+    "cgroup_cpu_period_us": 100000,
+    "pinning_command": "taskset -c 0"
+  },
+  "memory_allocation": {
+    "limit_bytes": 134217728,
+    "limit_human": "128 MB",
+    "swap_bytes": 0
+  },
+  "network_configuration": {
+    "interface": "lo",
+    "mtu_bytes": 1500,
+    "added_latency_ms": 15.0,
+    "jitter_ms": 3.0,
+    "packet_loss_percent": 0.01,
+    "emulation_tool": "tc qdisc add dev lo root netem delay 15ms 3ms",
+    "fragmentation_hypothesis": "Classical ECDH/ECDSA (64B/64B) fits in a single 1500B MTU frame. ML-KEM-768 PK (1,184B) + ML-DSA-65 sig (3,309B) forces IP fragmentation and multi-segment TCP reassembly, compounding latency with network jitter."
+  },
+  "benchmarking_parameters": {
+    "warmup_runs": 10,
+    "handshake_trials": 100,
+    "payload_trials": 30,
+    "payload_sizes_bytes": [1024, 102400, 10485760]
+  }
+}

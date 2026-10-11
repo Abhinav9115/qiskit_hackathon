@@ -1,0 +1,47 @@
+{
+  "processor_id": "processor_B",
+  "name": "Processor B (Constrained Server Profile)",
+  "description": "Production backend service profile constrained via cgroups to 1 CPU core and 512 MB memory.",
+  "target_architecture": "x86_64",
+  "cpu_allocation": {
+    "cores": 1.0,
+    "cgroup_cpu_quota_us": 100000,
+    "cgroup_cpu_period_us": 100000,
+    "pinning_command": "taskset -c 0",
+    "throttling_enabled": true
+  },
+  "memory_allocation": {
+    "limit_bytes": 536870912,
+    "limit_human": "512 MB",
+    "swap_bytes": 0,
+    "cgroup_memory_max": "536870912"
+  },
+  "network_configuration": {
+    "interface": "lo",
+    "mtu_bytes": 65536,
+    "added_latency_ms": 0.0,
+    "jitter_ms": 0.0,
+    "packet_loss_percent": 0.0,
+    "rate_limit_mbps": null
+  },
+  "benchmarking_parameters": {
+    "warmup_runs": 10,
+    "handshake_trials": 100,
+    "payload_trials": 30,
+    "payload_sizes_bytes": [1024, 102400, 10485760]
+  },
+  "ablations": [
+    {
+      "name": "B-cpu-only",
+      "description": "Capped to 1.0 core with unconstrained RAM",
+      "cores": 1.0,
+      "memory_bytes": null
+    },
+    {
+      "name": "B-mem-only",
+      "description": "Host CPUs with strict 128 MB RAM cap",
+      "cores": null,
+      "memory_bytes": 134217728
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "ML-KEM-512 x ML-DSA-44": {
+    "error": "FIPS 203 violation: ML-KEM-768 public key must be 1184 B, got 800 B"
+  },
+  "ML-KEM-512 x ML-DSA-65": {
+    "error": "FIPS 203 violation: ML-KEM-768 public key must be 1184 B, got 800 B"
+  },
+  "ML-KEM-512 x ML-DSA-87": {
+    "error": "FIPS 203 violation: ML-KEM-768 public key must be 1184 B, got 800 B"
+  },
+  "ML-KEM-768 x ML-DSA-44": {
+    "error": "FIPS 204 violation: ML-DSA-65 public key must be 1952 B, got 1312 B"
+  },
+  "ML-KEM-768 x ML-DSA-65": {
+    "kem": "ML-KEM-768",
+    "sig": "ML-DSA-65",
+    "kem_pk_bytes": 1184,
+    "kem_ct_bytes": 1088,
+    "sig_pk_bytes": 1952,
+    "signature_bytes": 3309,
+    "total_wire_bytes": 12890,
+    "timings_ms": {
+      "kem_keygen": 0.019038,
+      "kem_encap": 0.019298,
+      "kem_decap": 0.022225,
+      "dsa_keygen": 0.067449,
+      "dsa_sign": 0.259572,
+      "dsa_verify": 0.084489,
+      "total_crypto_latency": 0.748683
+    }
+  },
+  "ML-KEM-768 x ML-DSA-87": {
+    "error": "FIPS 204 violation: ML-DSA-65 public key must be 1952 B, got 2592 B"
+  },
+  "ML-KEM-1024 x ML-DSA-44": {
+    "error": "FIPS 203 violation: ML-KEM-768 public key must be 1184 B, got 1568 B"
+  },
+  "ML-KEM-1024 x ML-DSA-65": {
+    "error": "FIPS 203 violation: ML-KEM-768 public key must be 1184 B, got 1568 B"
+  },
+  "ML-KEM-1024 x ML-DSA-87": {
+    "error": "FIPS 203 violation: ML-KEM-768 public key must be 1184 B, got 1568 B"
+  }
+}

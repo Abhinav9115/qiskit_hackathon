@@ -1,0 +1,16 @@
+Platform,Payload,Mean Time (ms),Median Time (ms),Throughput Mean (MB/s),Throughput p95 (MB/s)
+Platform_A,1KB,0.1733,0.1468,6.02,7.03
+Platform_A,100KB,0.4155,0.3807,242.32,280.14
+Platform_A,10MB,25.7219,24.6495,394.56,425.46
+Platform_B,1KB,0.2090,0.1890,4.92,6.48
+Platform_B,100KB,0.4112,0.3879,247.13,311.40
+Platform_B,10MB,27.6996,28.3518,364.47,413.97
+Platform_B_cpu_only,1KB,0.1567,0.1556,6.30,6.98
+Platform_B_cpu_only,100KB,0.3630,0.3395,276.36,314.01
+Platform_B_cpu_only,10MB,27.5084,28.7020,367.41,416.51
+Platform_B_mem_only,1KB,0.1592,0.1513,6.24,7.09
+Platform_B_mem_only,100KB,0.3675,0.3418,275.06,307.87
+Platform_B_mem_only,10MB,27.5240,28.2047,366.51,412.44
+Platform_D,1KB,30.9779,30.9668,0.03,0.03
+Platform_D,100KB,46.5924,46.5520,2.10,2.11
+Platform_D,10MB,2506.1563,2505.2618,3.99,4.00

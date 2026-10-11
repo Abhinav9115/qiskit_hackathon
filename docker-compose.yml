@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  platform-a:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qsc_platform_a
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+    command: ["bench", "--platform", "Platform_A"]
+    volumes:
+      - ./results:/app/results
+
+  platform-b:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qsc_platform_b
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+    command: ["bench", "--platform", "Platform_B"]
+    volumes:
+      - ./results:/app/results
+
+  platform-d:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qsc_platform_d
+    cap_add:
+      - NET_ADMIN
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 128M
+    command: ["bench", "--platform", "Platform_D"]
+    volumes:
+      - ./results:/app/results

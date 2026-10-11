@@ -1,0 +1,31 @@
+{
+  "platform_id": "platform_A",
+  "name": "Platform A (Baseline Native Host)",
+  "description": "Native host baseline single-core performance profile without artificial throttling.",
+  "target_architecture": "x86_64",
+  "cpu_allocation": {
+    "cores": 1.0,
+    "pinning_command": "taskset -c 0",
+    "throttling_enabled": false,
+    "frequency_governor": "performance"
+  },
+  "memory_allocation": {
+    "limit_bytes": null,
+    "limit_human": "Unconstrained (Native Host RAM)",
+    "swap_bytes": null
+  },
+  "network_configuration": {
+    "interface": "lo",
+    "mtu_bytes": 65536,
+    "added_latency_ms": 0.0,
+    "jitter_ms": 0.0,
+    "packet_loss_percent": 0.0,
+    "rate_limit_mbps": null
+  },
+  "benchmarking_parameters": {
+    "warmup_runs": 10,
+    "handshake_trials": 100,
+    "payload_trials": 30,
+    "payload_sizes_bytes": [1024, 102400, 10485760]
+  }
+}
