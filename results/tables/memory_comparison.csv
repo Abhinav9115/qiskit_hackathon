@@ -1,0 +1,6 @@
+Platform,Initial RSS (MB),Peak RSS (MB),Kernel Peak RSS (MB),Peak Python Heap (MB),Cgroup Peak (MB),Cgroup Limit (MB)
+Platform_A,35.57,39.53,39.53,1.75,N/A,Unconstrained
+Platform_B,35.48,39.53,39.53,1.75,23.58,512.00
+Platform_B_cpu_only,35.29,39.53,39.53,1.75,N/A,Unconstrained
+Platform_B_mem_only,35.39,39.53,39.53,1.75,24.24,128.00
+Platform_D,39.65,39.84,39.70,0.66,46.21,128.00

@@ -1,8 +1,8 @@
 """
 Cryptographic Suite for QSC (Quantum-Safe Channel).
-Implements NIST FIPS 203 (ML-KEM) and FIPS 204 (ML-DSA) via liboqs,
-alongside RFC 5869 HKDF-SHA256, NIST SP 800-38D AES-256-GCM, and
-a classical reference baseline (ECDH P-256 + ECDSA P-256).
+Standards-compliant implementation of NIST FIPS 203 (ML-KEM-768) and FIPS 204 (ML-DSA-65)
+via native liboqs C-bindings only. Zero homemade or fallback primitives.
+Bulk encryption via NIST SP 800-38D AES-256-GCM and key derivation via RFC 5869 HKDF-SHA256.
 """
 
 from __future__ import annotations
@@ -22,6 +22,98 @@ from cryptography.hazmat.primitives import serialization
 logger = logging.getLogger("qsc.crypto")
 
 # =====================================================================
+# Strict Native liboqs Verification (No Homemade Fallbacks)
+# =====================================================================
+try:
+    import oqs  # type: ignore
+except ImportError as err:
+    raise RuntimeError(
+        "CRITICAL SECURITY REQUIREMENT: liboqs-python must be installed and functional. "
+        "Post-quantum cryptographic primitives cannot be substituted with homemade fallbacks. "
+        "Please install liboqs-python with native C library support or run in the provided container."
+    ) from err
+
+
+def require_algorithm(name: str, enabled: list[str]) -> None:
+    """
+    Enforces that the requested standardized NIST algorithm is natively compiled and enabled.
+    Refuses to execute or substitute lookalike primitives.
+    """
+    if name not in enabled:
+        raise RuntimeError(
+            f"FIPS Compliance Error: {name} is unavailable in this liboqs build; "
+            f"refusing to use a substitute. Enabled mechanisms: {enabled}"
+        )
+
+
+# Validate enabled mechanisms
+_enabled_kems = oqs.get_enabled_kem_mechanisms() if hasattr(oqs, "get_enabled_kem_mechanisms") else oqs.get_enabled_KEM_mechanisms()
+_enabled_sigs = oqs.get_enabled_sig_mechanisms() if hasattr(oqs, "get_enabled_sig_mechanisms") else oqs.get_enabled_SIG_mechanisms()
+
+require_algorithm("ML-KEM-768", _enabled_kems)
+require_algorithm("ML-DSA-65", _enabled_sigs)
+
+
+def _detect_native_liboqs_version() -> str:
+    """
+    Extracts the exact native C library version directly from liboqs bindings.
+    Fails closed if the runtime version cannot be verified.
+    """
+    if hasattr(oqs, "oqs_version") and callable(oqs.oqs_version):
+        ver = oqs.oqs_version()
+        if ver:
+            return str(ver)
+    if hasattr(oqs, "OQS_VERSION") and oqs.OQS_VERSION:
+        return str(oqs.OQS_VERSION)
+    try:
+        import importlib.metadata
+        return importlib.metadata.version("liboqs-python")
+    except Exception as err:
+        raise RuntimeError(
+            "CRITICAL: Unable to dynamically determine native liboqs version. "
+            "Refusing to execute with unverified cryptographic runtime."
+        ) from err
+
+
+def _detect_wrapper_version() -> str:
+    """
+    Extracts the exact liboqs-python wrapper package version.
+    Fails closed if package metadata is inaccessible.
+    """
+    if hasattr(oqs, "oqs_python_version") and callable(oqs.oqs_python_version):
+        return str(oqs.oqs_python_version())
+    try:
+        import importlib.metadata
+        return importlib.metadata.version("liboqs-python")
+    except Exception as err:
+        raise RuntimeError(
+            "CRITICAL: Unable to dynamically determine liboqs-python wrapper version."
+        ) from err
+
+
+LIBOQS_VERSION = _detect_native_liboqs_version()
+LIBOQS_WRAPPER_VERSION = _detect_wrapper_version()
+LIBOQS_BACKEND = "native_liboqs"
+
+
+def get_crypto_metadata() -> Dict[str, Any]:
+    """
+    Returns verified runtime metadata for the cryptographic backend and algorithms.
+    """
+    return {
+        "liboqs_version": LIBOQS_VERSION,
+        "liboqs_wrapper_version": LIBOQS_WRAPPER_VERSION,
+        "backend": LIBOQS_BACKEND,
+        "kem_mechanism": "ML-KEM-768",
+        "sig_mechanism": "ML-DSA-65",
+        "kem_fips_standard": "NIST FIPS 203",
+        "sig_fips_standard": "NIST FIPS 204",
+        "enabled_kems_count": len(_enabled_kems),
+        "enabled_sigs_count": len(_enabled_sigs),
+    }
+
+
+# =====================================================================
 # NIST FIPS Wire-Size Specifications
 # =====================================================================
 ML_KEM_768_PUBLIC_KEY_SIZE = 1184
@@ -32,108 +124,27 @@ ML_DSA_65_PUBLIC_KEY_SIZE = 1952
 ML_DSA_65_SECRET_KEY_SIZE = 4032
 ML_DSA_65_SIGNATURE_SIZE = 3309
 
-# Flag detecting whether native liboqs C library is active
-HAS_LIBOQS = False
-LIBOQS_BACKEND = "none"
-
-try:
-    import oqs  # type: ignore
-    HAS_LIBOQS = True
-    LIBOQS_BACKEND = "native_liboqs"
-except Exception as e:
-    logger.warning("Native liboqs not loaded (%s). Initializing exact-wire-size fallback shim.", e)
-    HAS_LIBOQS = False
-    LIBOQS_BACKEND = "fallback_shim"
-
-
-def get_enabled_kems() -> list[str]:
-    if not HAS_LIBOQS:
-        return []
-    if hasattr(oqs, "get_enabled_kem_mechanisms"):
-        return oqs.get_enabled_kem_mechanisms()
-    elif hasattr(oqs, "get_enabled_KEM_mechanisms"):
-        return oqs.get_enabled_KEM_mechanisms()
-    return []
-
-
-def get_enabled_sigs() -> list[str]:
-    if not HAS_LIBOQS:
-        return []
-    if hasattr(oqs, "get_enabled_sig_mechanisms"):
-        return oqs.get_enabled_sig_mechanisms()
-    elif hasattr(oqs, "get_enabled_SIG_mechanisms"):
-        return oqs.get_enabled_SIG_mechanisms()
-    return []
-
-
-def resolve_kem_algorithm(preferred: str = "ML-KEM-768") -> str:
-    """
-    Resolve standardized NIST FIPS 203 name with fallback to legacy Kyber names.
-    """
-    if not HAS_LIBOQS:
-        return preferred
-
-    enabled = get_enabled_kems()
-    candidates = [preferred, "Kyber768"]
-    if preferred == "ML-KEM-512":
-        candidates = ["ML-KEM-512", "Kyber512"]
-    elif preferred == "ML-KEM-1024":
-        candidates = ["ML-KEM-1024", "Kyber1024"]
-
-    for name in candidates:
-        if name in enabled:
-            return name
-
-    return preferred
-
-
-def resolve_sig_algorithm(preferred: str = "ML-DSA-65") -> str:
-    """
-    Resolve standardized NIST FIPS 204 name with fallback to legacy Dilithium names.
-    """
-    if not HAS_LIBOQS:
-        return preferred
-
-    enabled = get_enabled_sigs()
-    candidates = [preferred, "Dilithium3"]
-    if preferred == "ML-DSA-44":
-        candidates = ["ML-DSA-44", "Dilithium2"]
-    elif preferred == "ML-DSA-87":
-        candidates = ["ML-DSA-87", "Dilithium5"]
-
-    for name in candidates:
-        if name in enabled:
-            return name
-
-    return preferred
-
 
 # =====================================================================
-# Post-Quantum Key Encapsulation (FIPS 203 / ML-KEM-768)
+# Post-Quantum Key Encapsulation (NIST FIPS 203 / ML-KEM-768)
 # =====================================================================
 class PQCKeyEncapsulation:
     """
-    Standards-compliant ML-KEM-768 encapsulation provider with strict wire-size assertions.
+    Standards-compliant ML-KEM-768 encapsulation provider using native liboqs.
     """
 
     def __init__(self, alg_name: str = "ML-KEM-768"):
-        self.resolved_name = resolve_kem_algorithm(alg_name)
+        require_algorithm(alg_name, _enabled_kems)
         self.alg_name = alg_name
         self.backend = LIBOQS_BACKEND
 
     def generate_keypair(self) -> Tuple[bytes, bytes]:
         """
-        Generate (public_key, secret_key) asserting exact FIPS 203 sizes.
+        Generates (public_key, secret_key) asserting exact FIPS 203 sizes.
         """
-        if HAS_LIBOQS:
-            with oqs.KeyEncapsulation(self.resolved_name) as kem:
-                pk = bytes(kem.generate_keypair())
-                sk = bytes(kem.export_secret_key())
-        else:
-            # Deterministic wire-accurate fallback shim for environments without C liboqs
-            seed = os.urandom(64)
-            sk = hashlib.sha512(b"QSC-EMULATED-KEM-SK" + seed).digest()
-            pk = hashlib.sha256(b"QSC-EMULATED-KEM-PK" + sk).digest().ljust(ML_KEM_768_PUBLIC_KEY_SIZE, b"\x00")
+        with oqs.KeyEncapsulation(self.alg_name) as kem:
+            pk = bytes(kem.generate_keypair())
+            sk = bytes(kem.export_secret_key())
 
         assert len(pk) == ML_KEM_768_PUBLIC_KEY_SIZE, (
             f"FIPS 203 violation: ML-KEM-768 public key must be {ML_KEM_768_PUBLIC_KEY_SIZE} B, got {len(pk)} B"
@@ -142,21 +153,16 @@ class PQCKeyEncapsulation:
 
     def encap_secret(self, public_key: bytes) -> Tuple[bytes, bytes]:
         """
-        Encapsulate shared secret against public key: returns (ciphertext, shared_secret).
+        Encapsulates shared secret against public key: returns (ciphertext, shared_secret).
         """
         assert len(public_key) == ML_KEM_768_PUBLIC_KEY_SIZE, (
-            f"Invalid ML-KEM-768 public key size: {len(public_key)} B"
+            f"FIPS 203 violation: invalid ML-KEM-768 public key size: {len(public_key)} B"
         )
 
-        if HAS_LIBOQS:
-            with oqs.KeyEncapsulation(self.resolved_name) as kem:
-                ct, ss = kem.encap_secret(public_key)
-                ct = bytes(ct)
-                ss = bytes(ss)
-        else:
-            ephem = os.urandom(32)
-            ct = hashlib.sha256(b"QSC-EMULATED-CT" + ephem + public_key[:32]).digest().ljust(ML_KEM_768_CIPHERTEXT_SIZE, b"\x01")
-            ss = hashlib.sha256(b"QSC-EMULATED-SS" + ephem + public_key[:32]).digest()
+        with oqs.KeyEncapsulation(self.alg_name) as kem:
+            ct, ss = kem.encap_secret(public_key)
+            ct = bytes(ct)
+            ss = bytes(ss)
 
         assert len(ct) == ML_KEM_768_CIPHERTEXT_SIZE, (
             f"FIPS 203 violation: ML-KEM-768 ciphertext must be {ML_KEM_768_CIPHERTEXT_SIZE} B, got {len(ct)} B"
@@ -168,20 +174,14 @@ class PQCKeyEncapsulation:
 
     def decap_secret(self, ciphertext: bytes, secret_key: bytes) -> bytes:
         """
-        Decapsulate shared secret using private key.
+        Decapsulates shared secret using private key.
         """
         assert len(ciphertext) == ML_KEM_768_CIPHERTEXT_SIZE, (
-            f"Invalid ML-KEM-768 ciphertext size: {len(ciphertext)} B"
+            f"FIPS 203 violation: invalid ML-KEM-768 ciphertext size: {len(ciphertext)} B"
         )
 
-        if HAS_LIBOQS:
-            with oqs.KeyEncapsulation(self.resolved_name, secret_key=secret_key) as kem:
-                ss = bytes(kem.decap_secret(ciphertext))
-        else:
-            # Fallback decapsulation matching fallback encap
-            pk = hashlib.sha256(b"QSC-EMULATED-KEM-PK" + secret_key).digest().ljust(ML_KEM_768_PUBLIC_KEY_SIZE, b"\x00")
-            ephem = ciphertext[:32]
-            ss = hashlib.sha256(b"QSC-EMULATED-SS" + ephem + pk[:32]).digest()
+        with oqs.KeyEncapsulation(self.alg_name, secret_key=secret_key) as kem:
+            ss = bytes(kem.decap_secret(ciphertext))
 
         assert len(ss) == ML_KEM_768_SHARED_SECRET_SIZE, (
             f"FIPS 203 violation: ML-KEM-768 decapsulated secret must be {ML_KEM_768_SHARED_SECRET_SIZE} B, got {len(ss)} B"
@@ -190,30 +190,25 @@ class PQCKeyEncapsulation:
 
 
 # =====================================================================
-# Post-Quantum Digital Signature (FIPS 204 / ML-DSA-65)
+# Post-Quantum Digital Signature (NIST FIPS 204 / ML-DSA-65)
 # =====================================================================
 class PQCSignature:
     """
-    Standards-compliant ML-DSA-65 digital signature provider with strict wire-size assertions.
+    Standards-compliant ML-DSA-65 digital signature provider using native liboqs.
     """
 
     def __init__(self, alg_name: str = "ML-DSA-65"):
-        self.resolved_name = resolve_sig_algorithm(alg_name)
+        require_algorithm(alg_name, _enabled_sigs)
         self.alg_name = alg_name
         self.backend = LIBOQS_BACKEND
 
     def generate_keypair(self) -> Tuple[bytes, bytes]:
         """
-        Generate (public_key, secret_key) asserting exact FIPS 204 sizes.
+        Generates (public_key, secret_key) asserting exact FIPS 204 sizes.
         """
-        if HAS_LIBOQS:
-            with oqs.Signature(self.resolved_name) as sig:
-                pk = bytes(sig.generate_keypair())
-                sk = bytes(sig.export_secret_key())
-        else:
-            seed = os.urandom(64)
-            sk = hashlib.sha512(b"QSC-EMULATED-DSA-SK" + seed).digest().ljust(ML_DSA_65_SECRET_KEY_SIZE, b"\x00")
-            pk = hashlib.sha256(b"QSC-EMULATED-DSA-PK" + sk).digest().ljust(ML_DSA_65_PUBLIC_KEY_SIZE, b"\x00")
+        with oqs.Signature(self.alg_name) as sig:
+            pk = bytes(sig.generate_keypair())
+            sk = bytes(sig.export_secret_key())
 
         assert len(pk) == ML_DSA_65_PUBLIC_KEY_SIZE, (
             f"FIPS 204 violation: ML-DSA-65 public key must be {ML_DSA_65_PUBLIC_KEY_SIZE} B, got {len(pk)} B"
@@ -222,17 +217,10 @@ class PQCSignature:
 
     def sign(self, message: bytes, secret_key: bytes) -> bytes:
         """
-        Sign message using secret key.
+        Signs message using secret key.
         """
-        if HAS_LIBOQS:
-            with oqs.Signature(self.resolved_name, secret_key=secret_key) as sig:
-                signature = bytes(sig.sign(message))
-        else:
-            # Wire-accurate fallback HMAC signature
-            h = hmac.HMAC(secret_key[:32], hashes.SHA256())
-            h.update(message)
-            mac = h.finalize()
-            signature = (mac * (ML_DSA_65_SIGNATURE_SIZE // 32 + 1))[:ML_DSA_65_SIGNATURE_SIZE]
+        with oqs.Signature(self.alg_name, secret_key=secret_key) as sig:
+            signature = bytes(sig.sign(message))
 
         assert len(signature) == ML_DSA_65_SIGNATURE_SIZE, (
             f"FIPS 204 violation: ML-DSA-65 signature must be {ML_DSA_65_SIGNATURE_SIZE} B, got {len(signature)} B"
@@ -241,33 +229,22 @@ class PQCSignature:
 
     def verify(self, message: bytes, signature: bytes, public_key: bytes) -> bool:
         """
-        Verify signature over message using public key. Returns True if valid, False otherwise.
+        Verifies signature over message using public key. Returns True if valid, False otherwise.
         """
         if len(signature) != ML_DSA_65_SIGNATURE_SIZE:
             return False
         if len(public_key) != ML_DSA_65_PUBLIC_KEY_SIZE:
             return False
 
-        if HAS_LIBOQS:
-            try:
-                with oqs.Signature(self.resolved_name) as sig:
-                    return bool(sig.verify(message, signature, public_key))
-            except Exception:
-                return False
-        else:
-            # Fallback verification
-            expected_prefix = hashlib.sha256(public_key).digest()
-            # In fallback mode, signature must not be tampered with relative to expected HMAC
-            # For testing bit-flip detection, check against message
-            h = hmac.HMAC(public_key[:32], hashes.SHA256())
-            h.update(message)
-            expected_mac = h.finalize()
-            # Check prefix match or constant-time comparison
-            return signature[:16] == expected_mac[:16]
+        try:
+            with oqs.Signature(self.alg_name) as sig:
+                return bool(sig.verify(message, signature, public_key))
+        except Exception:
+            return False
 
 
 # =====================================================================
-# Key Derivation (RFC 5869 HKDF-SHA256)
+# Key Derivation (RFC 5869 HKDF-SHA256) & Mutual Finished MAC
 # =====================================================================
 def hkdf_extract(salt: bytes, ikm: bytes) -> bytes:
     """
@@ -297,7 +274,7 @@ def derive_session_keys(
     transcript_2: bytes,
 ) -> Dict[str, bytes]:
     """
-    Derives all channel session keys and verification tokens according to §3.2.
+    Derives directional bulk encryption keys, base IVs, dedicated Finished MAC key, and SessionID.
     """
     salt = client_nonce + server_nonce
     prk = hkdf_extract(salt, shared_secret)
@@ -306,7 +283,7 @@ def derive_session_keys(
     k_s2c = hkdf_expand(prk, b"QSC-v1-AES-256-GCM-S2C" + transcript_2, 32)
     iv_c2s_base = hkdf_expand(prk, b"QSC-v1-IV-BASE-C2S" + transcript_2, 12)
     iv_s2c_base = hkdf_expand(prk, b"QSC-v1-IV-BASE-S2C" + transcript_2, 12)
-    mac_confirm = hkdf_expand(prk, b"QSC-v1-FINISHED-CONFIRM", 32)
+    k_finished = hkdf_expand(prk, b"QSC-v1-FINISHED-KEY" + transcript_2, 32)
     session_id = hkdf_expand(prk, b"QSC-v1-SESSION-ID" + transcript_2, 32)
 
     return {
@@ -315,9 +292,20 @@ def derive_session_keys(
         "k_s2c": k_s2c,
         "iv_c2s_base": iv_c2s_base,
         "iv_s2c_base": iv_s2c_base,
-        "mac_confirm": mac_confirm,
+        "k_finished": k_finished,
         "session_id": session_id,
     }
+
+
+def compute_finished_mac(k_finished: bytes, role: str, transcript: bytes) -> bytes:
+    """
+    Computes Finished HMAC over role and transcript:
+    HMAC-SHA256(k_finished, role.encode() || transcript)
+    """
+    assert len(k_finished) == 32, "Finished key must be 32 bytes"
+    h = hmac.HMAC(k_finished, hashes.SHA256())
+    h.update(role.encode("utf-8") + transcript)
+    return h.finalize()
 
 
 # =====================================================================
@@ -345,7 +333,6 @@ def aes_gcm_encrypt(
     assert len(key) == 32, "Key must be 256 bits (32 bytes)"
     assert len(iv) == 12, "IV must be 96 bits (12 bytes)"
     aesgcm = AESGCM(key)
-    # cryptography package appends the 16-byte tag to the ciphertext
     ct_with_tag = aesgcm.encrypt(iv, plaintext, associated_data)
     ciphertext = ct_with_tag[:-16]
     tag = ct_with_tag[-16:]
@@ -378,7 +365,7 @@ def sha256_digest(data: bytes) -> bytes:
 
 # =====================================================================
 # Classical Reference Baseline (ECDH P-256 + ECDSA P-256)
-# broken by Shor's algorithm — solely for transition comparison (§5)
+# broken by Shor's algorithm — solely for transition comparison
 # =====================================================================
 class ClassicalReferenceBaseline:
     """

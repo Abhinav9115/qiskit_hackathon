@@ -52,8 +52,20 @@ class AsyncTCPTransport:
     async def write_frame(self, frame: bytes) -> None:
         """
         Writes a symmetric frame (which already contains a 4-byte length prefix for the chunk).
+        Pipelines chunks across kernel socket buffer without blocking on every chunk.
         """
-        await self.write_exact(frame)
+        self.writer.write(frame)
+        self.bytes_sent += len(frame)
+        tr = self.writer.transport
+        if tr is not None and hasattr(tr, "get_write_buffer_size"):
+            if tr.get_write_buffer_size() > 524288:  # 512 KB
+                await self.writer.drain()
+        else:
+            await asyncio.sleep(0)
+
+    async def flush(self) -> None:
+        """Flushes remaining bytes to socket."""
+        await self.writer.drain()
 
     async def read_frame(self) -> bytes:
         """
@@ -84,12 +96,13 @@ class MockTransport:
         mtu: int = 65536,
         latency_ms: float = 0.0,
         packet_loss_rate: float = 0.0,
+        max_buffer_chunks: int = 8,
     ):
         self.mtu = mtu
         self.latency_ms = latency_ms
         self.packet_loss_rate = packet_loss_rate
-        self.queue_c2s: asyncio.Queue[bytes] = asyncio.Queue()
-        self.queue_s2c: asyncio.Queue[bytes] = asyncio.Queue()
+        self.queue_c2s: asyncio.Queue[bytes] = asyncio.Queue(maxsize=max_buffer_chunks)
+        self.queue_s2c: asyncio.Queue[bytes] = asyncio.Queue(maxsize=max_buffer_chunks)
         self.bytes_sent_c2s = 0
         self.bytes_sent_s2c = 0
         self.tamper_hook = None

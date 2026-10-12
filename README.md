@@ -3,7 +3,7 @@
 **Problem Statement P1: "Quantum-Safe Secure Channel"**  
 **Codename:** `QSC — Quantum-Safe Channel`
 
-[![Tests](https://img.shields.io/badge/pytest-24%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/pytest-25%20passed-brightgreen.svg)](tests/)
 [![NIST FIPS 203](https://img.shields.io/badge/FIPS%20203-ML--KEM--768-blue.svg)](docs/PROTOCOL.md)
 [![NIST FIPS 204](https://img.shields.io/badge/FIPS%20204-ML--DSA--65-blue.svg)](docs/PROTOCOL.md)
 [![AEAD](https://img.shields.io/badge/AEAD-AES--256--GCM-success.svg)](docs/PROTOCOL.md)
@@ -69,26 +69,42 @@ project/
        ===========                                                    ===========
 [Ephemeral ML-KEM-768 Keygen]
        |
-       |  ----------------- 1. ClientHello (1,228 B) --------------->  [Verify Version & Ciphersuite]
+       |  ----------------- 1. ClientHello (1,232 B Wire) ------------>  [Verify Version & Ciphersuite]
        |     {version, suite_id, N_c, PK_kem_eph, timestamp}             [Generate N_s (32B)]
        |                                                                 [SS, CT_kem = Encaps(PK_kem_eph)]
        |                                                                 [Compute Transcript_1]
        |                                                                 [Sig_server = Sign(SK_dsa_server, Transcript_1)]
-       |  <---------------- 2. ServerHello (4,449 B) -----------------   [Derive PRK = HKDF-Extract(N_c || N_s, SS)]
-       |     {CT_kem, N_s, ID_server, Sig_server, timestamp}
+       |  <---------------- 2. ServerHello (4,453 B Wire) ------------   [Derive PRK = HKDF-Extract(N_c || N_s, SS)]
+       |     {CT_kem, N_s, ID_server, Sig_server, timestamp}             [Derive Session Keys & K_finished]
 [Verify Server Identity Pin]
 [Compute Transcript_1 & Verify Sig_server]
 [SS = Decaps(SK_kem_eph, CT_kem)]
-[Derive PRK & Session Keys: K_c2s, K_s2c, IVs]
+[Derive PRK & Session Keys: K_c2s, K_s2c, IVs, K_finished]
 [Compute Transcript_2]
 [Sig_client = Sign(SK_dsa_client, Transcript_2)]
+[MAC_c = HMAC(K_finished, "CLIENT" || Transcript_2)]
        |
-       |  ----------------- 3. ClientAuth (3,355 B) ---------------->  [Verify Client Identity Pin]
+       |  ----------------- 3. ClientAuth (3,359 B Wire) ------------->  [Verify Client Identity Pin]
        |     {ID_client, Sig_client, MAC_confirm}                        [Verify Sig_client over Transcript_2]
-       |                                                                 [Derive Session Keys]
-       |                                                                 [Verify MAC_confirm Token]
+       |                                                                 [Verify MAC_c Token]
+       |                                                                 [Compute Transcript_3]
+       |                                                                 [MAC_s = HMAC(K_finished, "SERVER" || Transcript_3)]
+       |  <---------------- 4. ServerFinished (36 B Wire) ------------  [Send Server Finished Confirmation]
+       |     {MAC_confirm}
+[Compute Transcript_3]
+[Verify MAC_s Token]
 [CHANNEL ESTABLISHED]                                              [CHANNEL ESTABLISHED]
 ```
+
+### Measured Wire Flight Sizes (Socket Boundary)
+* **Flight 1 (`ClientHello`):** $1,228\text{ B}$ payload $+ 4\text{ B}$ length prefix $= \mathbf{1,232\text{ B}}$
+* **Flight 2 (`ServerHello`):** $4,449\text{ B}$ payload $+ 4\text{ B}$ length prefix $= \mathbf{4,453\text{ B}}$
+* **Flight 3 (`ClientAuth`):** $3,355\text{ B}$ payload $+ 4\text{ B}$ length prefix $= \mathbf{3,359\text{ B}}$
+* **Flight 4 (`ServerFinished`):** $32\text{ B}$ payload $+ 4\text{ B}$ length prefix $= \mathbf{36\text{ B}}$
+* **Total Handshake Wire:** $9,064\text{ B}$ payload / $\mathbf{9,080\text{ B}}$ wire framing ($+6\text{ B}$ routing prefix across netns).
+
+> [!NOTE]
+> **Cryptographic Freshness vs. Timestamps:** Timestamps are included in message headers for logging and diagnostic telemetry. However, protocol freshness and replay immunity are strictly established by fresh 256-bit cryptographically secure random nonces ($N_c, N_s$), ephemeral KEM key generation per session, and transcript binding—not by wall-clock time—preventing denial-of-service or vulnerabilities under clock drift.
 
 ### Binary Chunk Framing (64 KB Authenticated Chunks)
 ```
@@ -164,39 +180,56 @@ Side-by-side proof of post-quantum security hardening:
 
 ## 6. Empirical Benchmark Results
 
-Measured on classical x86_64 hardware ($\ge 100$ handshake runs, $\ge 30$ transfer trials per payload, with nanosecond resolution):
+Measured on Linux/WSL classical x86_64 hardware (100 trials for every handshake and payload size, nanosecond resolution):
 
-### Handshake Latency & Wire Bloat
-| Platform | Environment Profile | Mean (ms) | Median (ms) | p95 (ms) | 95% Bootstrap CI (ms) | Handshake Wire Bytes |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Platform A** | Native Host Baseline (1 core) | **0.7801** | 0.7336 | 1.0719 | [0.7506, 0.8122] | 9,032 B |
-| **Platform B** | Constrained Server (1 core, 512 MB) | **0.7538** | 0.7153 | 1.0659 | [0.7272, 0.7811] | 9,032 B |
-| **Platform B (cpu)** | Ablation: 1 core, unconstrained RAM | **0.7773** | 0.7541 | 1.0604 | [0.7501, 0.8066] | 9,032 B |
-| **Platform B (mem)** | Ablation: Host CPUs, 128 MB RAM | **0.7826** | 0.7303 | 1.0986 | [0.7437, 0.8326] | 9,032 B |
-| **Platform D** | Network Emulator (1500B MTU + 15ms Jitter) | **47.2964** | 47.2675 | 47.8437 | [47.2482, 47.3479] | 9,032 B |
+### Handshake Latency & Wire Bloat (100 Trials Each)
+| Platform | Environment Profile | Mean (ms) | Median (ms) | StdDev (ms) | p95 (ms) | 95% Bootstrap CI (ms) | Protocol Wire | Harness Wire | Total Socket |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Platform A** | Native Host Baseline (1 core pinned via sched_setaffinity) | **1.1734** | 1.1010 | 0.2181 | 1.6005 | [1.1336, 1.2208] | 9,080 B | 0 B | 9,080 B |
+| **Platform B** | Constrained Server (1 core pinned, 512 MB cgroups v2) | **1.1841** | 1.1123 | 0.2548 | 1.7470 | [1.1374, 1.2353] | 9,080 B | 0 B | 9,080 B |
+| **Platform B (cpu)** | Ablation: 1 core pinned, unconstrained RAM | **1.0812** | 1.0301 | 0.1869 | 1.4556 | [1.0463, 1.1190] | 9,080 B | 0 B | 9,080 B |
+| **Platform B (mem)** | Ablation: Host CPUs, 128 MB cgroups v2 RAM | **1.0825** | 1.0479 | 0.1399 | 1.3037 | [1.0566, 1.1115] | 9,080 B | 0 B | 9,080 B |
+| **Platform D** | Kernel NetNS (1 core, 128 MB cgroups, MTU 1500, 15ms/3ms) | **65.9747** | 66.1105 | 2.6180 | 69.9835 | [65.4185, 66.5371] | 9,080 B | 6 B | 9,086 B |
 
-### Streaming AEAD Throughput vs. Payload Size
+*Note on A vs. B:* Both Platform A and B allocate 1 dedicated CPU core (`sched_setaffinity(0, {0})`). Handshake CPU latencies are statistically indistinguishable (1.173 ms vs 1.184 ms), confirming that the primary difference is the 512 MB cgroups v2 memory constraint, under which QSC operates well below the memory ceiling. Sequential cgroup isolation is guaranteed by fresh child process execution.
+
+### Streaming AEAD Throughput vs. Payload Size (100 Trials Each)
 | Platform | 1 KB Payload | 100 KB Payload | 10 MB Payload |
 | :--- | :--- | :--- | :--- |
-| **Platform A** | 6.02 MB/s (0.17 ms) | 242.32 MB/s (0.42 ms) | **394.56 MB/s (25.72 ms)** |
-| **Platform B** | 4.92 MB/s (0.21 ms) | 247.13 MB/s (0.41 ms) | **364.47 MB/s (27.70 ms)** |
-| **Platform D** | 0.03 MB/s (30.98 ms) | 2.10 MB/s (46.59 ms) | **3.99 MB/s (2,506 ms)** |
+| **Platform A** | 0.42 MB/s (2.37 ms) | 32.11 MB/s (3.11 ms) | **133.22 MB/s (75.14 ms)** |
+| **Platform B** | 0.45 MB/s (2.24 ms) | 32.87 MB/s (3.01 ms) | **134.13 MB/s (74.76 ms)** |
+| **Platform D** | 0.03 MB/s (34.34 ms) | 0.82 MB/s (119.24 ms) | **30.03 MB/s (343.78 ms)** |
 
-### Cryptographic Micro-benchmark Breakdown
-* `ML-KEM-768 Encap`: **15.0 $\mu$s** (vs. Classical ECDH P-256: 65.0 $\mu$s)
-* `ML-KEM-768 Decap`: **16.8 $\mu$s**
-* `ML-DSA-65 Sign`: **96.1 $\mu$s**
-* `ML-DSA-65 Verify`: **35.8 $\mu$s** (vs. Classical ECDSA P-256 Verify: 69.7 $\mu$s)
-* `HKDF-SHA256 Derive`: **12.4 $\mu$s**
+### Peak Memory Footprint During 10 MB Transfer
+* **Platform A:** Peak Process RSS: **39.53 MB** | Peak Python Heap (`tracemalloc`): **1.75 MB** | Cgroup Limit: **Unconstrained**
+* **Platform B:** Peak Process RSS: **39.53 MB** | Peak Python Heap: **1.75 MB** | Cgroup Peak: **23.58 MB** | Cgroup Limit: **512.00 MB**
+* **Platform B (mem-only):** Peak Process RSS: **39.53 MB** | Peak Python Heap: **1.75 MB** | Cgroup Peak: **24.24 MB** | Cgroup Limit: **128.00 MB**
+* **Platform D:** Peak Process RSS: **39.84 MB** | Peak Python Heap: **0.66 MB** | Cgroup Peak: **46.21 MB** | Cgroup Limit: **128.00 MB**
+
+### Cryptographic Micro-benchmark Breakdown (100 Trials)
+* `ML-KEM-768 Keygen`: **17.0 us**
+* `ML-KEM-768 Encap`: **15.2 us** (vs. Classical ECDH P-256: 61.3 us)
+* `ML-KEM-768 Decap`: **18.9 us**
+* `ML-DSA-65 Sign`: **102.6 us**
+* `ML-DSA-65 Verify`: **38.8 us** (vs. Classical ECDSA P-256 Verify: 71.2 us)
+* `HKDF-SHA256 Derive`: **12.8 us**
+* `Classical ECDSA P-256 Sign`: **22.6 us**
 
 ---
 
-## 7. Platform D Innovation: Post-Quantum Wire Bloat & MTU Fragmentation
+## 7. Platform D Innovation: Kernel NetNS MTU Segmentation & Jitter Analysis
 
-While post-quantum primitives are computationally faster than classical elliptic curve math, they suffer from **wire bloat**:
-* Classical ECDH + ECDSA handshake wire size: **~336 bytes** (fits completely within a single standard 1,500-byte Ethernet MTU).
-* Post-Quantum ML-KEM-768 + ML-DSA-65 handshake wire size: **9,032 bytes** (requires multiple IP packet fragmentations and TCP segment reassemblies).
-* Under Platform D's network conditions (1,500 B MTU with 15ms jitter), the 9 KB wire footprint causes a **+5,960% latency inflation** (from 0.78 ms to 47.30 ms), proving that wire bloat—not CPU execution—is the primary bottleneck in production PQC deployment.
+Platform D executes across isolated Linux network namespaces (`ns_cli`, `ns_srv`) over a virtual Ethernet (`veth`) pair shaped via kernel `tc netem`. Both client and server processes are strictly constrained to 1 pinned CPU core and 128 MB RAM in cgroup `qsc_bench_d`:
+* **Standard Ethernet MTU:** 1,500 bytes (TCP MSS = 1,460 bytes).
+* **Classical ECDH + ECDSA Handshake:** ~336 bytes (fits completely in a single 1,460 B TCP segment without segmentation).
+* **Post-Quantum ML-KEM-768 + ML-DSA-65 Handshake:** **9,080 bytes** protocol wire (plus 6 bytes netns multiplexing control framing). Exceeds the 1,460-byte TCP MSS by $6.22\times$, inducing multi-segment TCP packetization.
+* **TCP Segmentation vs. IP Fragmentation:** Because the TCP stack packetizes the stream within the MSS boundary prior to submitting packets to the IP layer, **no Layer-3 IP fragmentation occurs**. Instead, the performance penalty is governed by **multi-segment TCP transmission, sliding-window acknowledgment serialization, and jitter-induced reassembly latency**.
+* **Measured Netem Ablation Results (Table 5: 100 Trials Each):**
+  * `D_baseline_unshaped` (MTU 1500, 0ms delay): **0.9105 ms** (6,642 kernel packets exchanged)
+  * `D_latency_only_15ms` (MTU 1500, 15ms delay): **62.4694 ms** (10,622 packets)
+  * `D_jitter_15ms_3ms` (MTU 1500, 15ms delay, 3ms jitter): **66.0228 ms** (p95: 71.05 ms, 14,554 packets)
+  * `D_rate_limited_10mbps` (MTU 1500, 15ms delay, 3ms jitter, 10 Mbps): **74.7957 ms** (13,406 packets)
+* **Finding:** While handshake latency is dominated by network round-trips and TCP segmentation reassembly across MTU boundaries (+7,150% increase over local baseline), 10 Mbps bandwidth throttling introduces only modest additional delay (~8.8 ms) on handshakes, proving that round-trip serialization and jitter—not raw link bandwidth—form the critical bottleneck for post-quantum handshakes.
 
 ---
 

@@ -53,30 +53,38 @@ def plot_fig1_wire_framing(output_path: str = "results/figures/fig1_handshake_wi
 
     # Step 1: ClientHello
     ax1.annotate(
-        "", xy=(7.9, 7.5), xytext=(2.1, 7.5),
+        "", xy=(7.9, 7.8), xytext=(2.1, 7.8),
         arrowprops=dict(arrowstyle="->", lw=2, color="#2563eb")
     )
-    ax1.text(5, 7.8, "1. ClientHello {ver, suite, N_c, PK_kem_eph (1,184B), ts} [1,228 B]",
+    ax1.text(5, 8.1, "1. ClientHello {ver, suite, N_c, PK_kem_eph (1,184B), ts} [1,228 B]",
              ha="center", bbox=dict(boxstyle="round,pad=0.3", fc="#dbeafe", ec="#2563eb", lw=1.2))
 
     # Step 2: ServerHello
     ax1.annotate(
-        "", xy=(2.1, 5.0), xytext=(7.9, 5.0),
+        "", xy=(2.1, 5.8), xytext=(7.9, 5.8),
         arrowprops=dict(arrowstyle="->", lw=2, color="#dc2626")
     )
-    ax1.text(5, 5.3, "2. ServerHello {CT_kem (1,088B), N_s, ID_server, Sig_server (3,309B)} [4,449 B]",
+    ax1.text(5, 6.1, "2. ServerHello {CT_kem (1,088B), N_s, ID_server, Sig_server (3,309B)} [4,449 B]",
              ha="center", bbox=dict(boxstyle="round,pad=0.3", fc="#fee2e2", ec="#dc2626", lw=1.2))
 
     # Step 3: ClientAuth
     ax1.annotate(
-        "", xy=(7.9, 2.5), xytext=(2.1, 2.5),
+        "", xy=(7.9, 3.8), xytext=(2.1, 3.8),
         arrowprops=dict(arrowstyle="->", lw=2, color="#059669")
     )
-    ax1.text(5, 2.8, "3. ClientAuth {ID_client, Sig_client (3,309B), MAC_confirm (32B)} [3,355 B]",
+    ax1.text(5, 4.1, "3. ClientAuth {ID_client, Sig_client (3,309B), MAC_client_finished (32B)} [3,355 B]",
              ha="center", bbox=dict(boxstyle="round,pad=0.3", fc="#d1fae5", ec="#059669", lw=1.2))
 
-    ax1.text(5, 1.2, "Channel Established (K_c2s, K_s2c derived via HKDF-SHA256 from SS)",
-             ha="center", style="italic", weight="bold", color="#047857")
+    # Step 4: ServerFinished
+    ax1.annotate(
+        "", xy=(2.1, 1.8), xytext=(7.9, 1.8),
+        arrowprops=dict(arrowstyle="->", lw=2, color="#7c3aed")
+    )
+    ax1.text(5, 2.1, "4. ServerFinished {MAC_server_finished (32B)} [32 B]",
+             ha="center", bbox=dict(boxstyle="round,pad=0.3", fc="#f3e8ff", ec="#7c3aed", lw=1.2))
+
+    ax1.text(5, 0.6, "Channel Established: Mutual Finished HMACs Confirmed (K_c2s, K_s2c derived via HKDF)",
+             ha="center", style="italic", weight="bold", color="#047857", fontsize=9.5)
 
     # Bottom: Symmetric Binary Chunk Frame Layout
     ax2.set_xlim(0, 100)
@@ -238,14 +246,14 @@ def plot_fig6_platform_d_tradeoff(summary_data: dict, output_path: str = "result
 
     penalty = ((lat_d - lat_a) / max(0.001, lat_a)) * 100
     ax.annotate(
-        f"+{penalty:.1f}% Latency Inflation\n(MTU fragmentation + TCP reassembly jitter)",
+        f"+{penalty:.1f}% Latency Inflation\n(TCP segmentation (MSS 1460B) + Multi-RTT reassembly)",
         xy=(1, lat_d), xytext=(0.5, lat_d * 0.75),
         arrowprops=dict(facecolor="black", shrink=0.05, width=1.5, headwidth=8),
         fontsize=10, weight="bold", bbox=dict(boxstyle="round,pad=0.4", fc="#fef3c7", ec="#f59e0b")
     )
 
     ax.set_ylabel("Handshake Latency (ms)", weight="bold")
-    ax.set_title("Platform D Innovation: Post-Quantum Wire Bloat & MTU Fragmentation Impact", weight="bold", pad=12)
+    ax.set_title("Platform D Innovation: Post-Quantum Wire Bloat & TCP Segmentation Impact", weight="bold", pad=12)
     ax.grid(axis="y", linestyle="--", alpha=0.7)
     plt.tight_layout()
     plt.savefig(output_path, dpi=300)

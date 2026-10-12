@@ -1,0 +1,5 @@
+Configuration,Trials,MTU (B),Delay (ms),Jitter (ms),Rate Limit,Handshake Mean (ms),Handshake p95 (ms),Protocol Wire (B),Harness Wire (B),Interface Wire (B),Packets Exchanged
+D_baseline_unshaped,100,1500,0.0,0.0,Line-Rate,0.9105,1.2484,9080,6,13586330,6642
+D_latency_only_15ms,100,1500,15.0,0.0,Line-Rate,62.4694,62.9015,9080,6,13849178,10622
+D_jitter_15ms_3ms,100,1500,15.0,3.0,Line-Rate,66.0228,71.0511,9080,6,14288246,14554
+D_rate_limited_10mbps,100,1500,15.0,3.0,10.0,74.7957,78.8176,9080,6,14032922,13406

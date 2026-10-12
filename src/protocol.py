@@ -1,7 +1,18 @@
 """
 QSC Wire Framing, Handshake State Machine, and Streaming Protocol.
 Implements binary serialization, domain-separated transcript hashing,
-64 KB chunk authenticated framing, replay defenses, and EOF digest validation.
+mutual Finished MAC verification, 64 KB chunk authenticated framing,
+replay defenses, and EOF digest validation.
+
+LIMITS OF TIMESTAMP FIELDS:
+`timestamp` fields (uint64 milliseconds) are included in `ClientHello` and `ServerHello`
+and are cryptographically bound into signed transcripts (Transcript_1, Transcript_2, Transcript_3).
+However, timestamps are NOT validated against a tight clock freshness window to allow
+operation across unsynchronized clocks or air-gapped environments without clock skew failures.
+Instead, freshness and replay defenses are strictly guaranteed by:
+1. 32-byte cryptographically secure random nonces (ClientNonce and ServerNonce).
+2. Ephemeral ML-KEM-768 key pairs generated fresh per session.
+3. Strict monotonic sequence counters (64-bit uint) checked in AEAD chunk frames.
 """
 
 from __future__ import annotations
@@ -22,6 +33,7 @@ from src.crypto_suite import (
     aes_gcm_decrypt,
     compute_chunk_iv,
     sha256_digest,
+    compute_finished_mac,
 )
 
 PROTOCOL_VERSION = 0x0100  # v1.0
@@ -169,8 +181,24 @@ class ClientAuth:
         )
 
 
+@dataclass(frozen=True)
+class ServerFinished:
+    mac_confirm: bytes
+
+    def serialize(self) -> bytes:
+        assert len(self.mac_confirm) == 32
+        return struct.pack(">32s", self.mac_confirm)
+
+    @classmethod
+    def deserialize(cls, data: bytes) -> ServerFinished:
+        if len(data) != 32:
+            raise QSCTamperError(f"Malformed ServerFinished size: expected 32, got {len(data)}")
+        mac = struct.unpack(">32s", data)[0]
+        return cls(mac_confirm=mac)
+
+
 # =====================================================================
-# Transcript Binding Computations (§3.1)
+# Transcript Binding Computations
 # =====================================================================
 def compute_transcript_1(
     client_hello_wire: bytes,
@@ -212,10 +240,24 @@ def compute_transcript_2(
     return sha256_digest(payload)
 
 
+def compute_transcript_3(
+    transcript_2: bytes,
+    client_auth_wire: bytes,
+) -> bytes:
+    """
+    Transcript_3 = SHA-256("QSC-v1-SERVER-FINISH" || Transcript_2 || ClientAuth)
+    """
+    payload = (
+        b"QSC-v1-SERVER-FINISH"
+        + transcript_2
+        + client_auth_wire
+    )
+    return sha256_digest(payload)
+
+
 # =====================================================================
-# Symmetric Frame Layout & Chunk Framing (§3.3)
+# Symmetric Frame Layout & Chunk Framing
 # =====================================================================
-# Layout: Chunk Length (4B) | Counter (8B) | IV (12B) | Ciphertext (NB) | Tag (16B)
 CHUNK_HEADER_SIZE = 4 + 8 + 12  # 24 Bytes
 GCM_TAG_SIZE = 16
 
@@ -244,7 +286,6 @@ def frame_chunk(
     aad = build_aad(session_id, direction, counter, final_flag)
     ciphertext, tag = aes_gcm_encrypt(key, iv, plaintext, aad)
 
-    # Chunk length = ciphertext + tag
     chunk_length = len(ciphertext) + len(tag)
     header = struct.pack(">IQ12s", chunk_length, counter, iv)
     return header + ciphertext + tag
@@ -295,7 +336,7 @@ def unframe_chunk(
 
 
 # =====================================================================
-# End-to-End Plaintext Hash Serialization (§3.3 & §5.2)
+# End-to-End Plaintext Hash Serialization
 # =====================================================================
 def build_eof_payload(total_bytes: int, plaintext_sha256: bytes) -> bytes:
     """

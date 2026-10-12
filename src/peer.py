@@ -1,20 +1,24 @@
 """
 Authenticated Peer Nodes (Client & Server) for QSC.
-Executes the 1-RTT mutually authenticated handshake state machine,
-session key derivation, encrypted chunk streaming, and replay protection.
+Executes the 1-RTT mutually authenticated handshake state machine with mutual Finished MACs,
+session key derivation, genuine streaming chunk transfer, and replay protection.
 """
 
 from __future__ import annotations
 
+import io
 import os
 import time
+import hmac
 import hashlib
-from typing import Optional, Tuple, Dict, Any, AsyncIterator
+from pathlib import Path
+from typing import Optional, Tuple, Dict, Any, Union, BinaryIO
 
 from src.crypto_suite import (
     PQCKeyEncapsulation,
     PQCSignature,
     derive_session_keys,
+    compute_finished_mac,
     sha256_digest,
 )
 from src.protocol import (
@@ -28,8 +32,10 @@ from src.protocol import (
     ClientHello,
     ServerHello,
     ClientAuth,
+    ServerFinished,
     compute_transcript_1,
     compute_transcript_2,
+    compute_transcript_3,
     frame_chunk,
     unframe_chunk,
     build_eof_payload,
@@ -44,7 +50,7 @@ from src.trust_store import TrustStore
 
 class QSCPeer:
     """
-    Base Peer implementing common state, session keys, and streaming frames.
+    Base Peer implementing common cryptographic state and streaming frames.
     """
 
     def __init__(
@@ -78,13 +84,11 @@ class QSCPeer:
 
 class QSCClient(QSCPeer):
     """
-    Client node initiating the 1-RTT handshake and secure channel session.
+    Client node initiating the mutually authenticated 1-RTT handshake.
+    Marks session established only after verifying ServerFinished confirmation.
     """
 
     async def perform_handshake(self, transport) -> Dict[str, Any]:
-        """
-        Executes full 1-RTT handshake with mutual authentication against Server.
-        """
         t0 = time.perf_counter_ns()
 
         # 1. Ephemeral ML-KEM-768 generation & Client Nonce
@@ -129,7 +133,7 @@ class QSCClient(QSCPeer):
         # 6. Decapsulate Shared Secret SS
         shared_secret = self.kem_provider.decap_secret(server_hello.kem_ciphertext, kem_sk)
 
-        # 7. Compute Transcript_2 and derive session keys
+        # 7. Compute Transcript_2 and derive session keys & Finished key
         transcript_2 = compute_transcript_2(
             transcript_1=transcript_1,
             server_hello_wire=server_hello_wire,
@@ -142,20 +146,32 @@ class QSCClient(QSCPeer):
             transcript_2=transcript_2,
         )
 
-        # 8. Sign Transcript_2 and send ClientAuth
+        # 8. Sign Transcript_2 and send ClientAuth with Client Finished MAC
         client_sig = self.sig_provider.sign(transcript_2, self.signing_key)
+        client_finished_mac = compute_finished_mac(keys["k_finished"], "CLIENT", transcript_2)
+
         client_auth = ClientAuth(
             client_id=self.identity,
             signature=client_sig,
-            mac_confirm=keys["mac_confirm"],
+            mac_confirm=client_finished_mac,
         )
         client_auth_wire = client_auth.serialize()
         await transport.write_length_prefixed(client_auth_wire)
 
+        # 9. Receive and Verify ServerFinished message before marking established
+        server_finished_wire = await transport.read_length_prefixed()
+        server_finished = ServerFinished.deserialize(server_finished_wire)
+
+        transcript_3 = compute_transcript_3(transcript_2, client_auth_wire)
+        expected_server_mac = compute_finished_mac(keys["k_finished"], "SERVER", transcript_3)
+
+        if not hmac.compare_digest(expected_server_mac, server_finished.mac_confirm):
+            raise QSCAuthenticationError("Server Finished confirmation MAC verification failed.")
+
         t1 = time.perf_counter_ns()
         self.handshake_latency_ns = t1 - t0
 
-        # Save session context
+        # Channel mutually confirmed and established
         self.session_keys = keys
         self.session_id = keys["session_id"]
         self.peer_identity = server_hello.server_id
@@ -170,107 +186,155 @@ class QSCClient(QSCPeer):
             "latency_ms": self.handshake_latency_ns / 1_000_000.0,
         }
 
-    async def send_payload(self, transport, data: bytes) -> Dict[str, Any]:
+    async def send_stream(self, transport, source: Union[bytes, str, Path, BinaryIO]) -> Dict[str, Any]:
         """
-        Streams data in 64 KB authenticated chunks from Client to Server.
+        Genuine streaming transmission: reads input in 64 KB chunks without buffering full payload.
         """
         assert self.session_keys is not None, "Handshake not established"
         key = self.session_keys["k_c2s"]
         base_iv = self.session_keys["iv_c2s_base"]
         session_id = self.session_id
 
-        total_bytes = len(data)
-        hasher = hashlib.sha256()
-        offset = 0
+        is_opened_here = False
+        if isinstance(source, (str, Path)):
+            stream = open(source, "rb")
+            is_opened_here = True
+        elif hasattr(source, "read"):
+            stream = source
+        else:
+            stream = io.BytesIO(source)
 
-        # Send intermediate chunks
-        while offset < total_bytes:
-            chunk_data = data[offset : offset + MAX_CHUNK_PLAINTEXT_SIZE]
-            hasher.update(chunk_data)
-            frame = frame_chunk(
+        try:
+            total_bytes = 0
+            hasher = hashlib.sha256()
+
+            while chunk := stream.read(MAX_CHUNK_PLAINTEXT_SIZE):
+                total_bytes += len(chunk)
+                hasher.update(chunk)
+                frame = frame_chunk(
+                    session_id=session_id,
+                    key=key,
+                    base_iv=base_iv,
+                    counter=self.send_counter,
+                    plaintext=chunk,
+                    direction=DIRECTION_C2S,
+                    final_flag=FLAG_INTERMEDIATE,
+                )
+                await transport.write_frame(frame)
+                self.send_counter += 1
+
+            # Send terminal authenticated EOF chunk
+            eof_payload = build_eof_payload(total_bytes, hasher.digest())
+            eof_frame = frame_chunk(
                 session_id=session_id,
                 key=key,
                 base_iv=base_iv,
                 counter=self.send_counter,
-                plaintext=chunk_data,
+                plaintext=eof_payload,
                 direction=DIRECTION_C2S,
-                final_flag=FLAG_INTERMEDIATE,
+                final_flag=FLAG_EOF,
             )
-            await transport.write_frame(frame)
+            await transport.write_frame(eof_frame)
             self.send_counter += 1
-            offset += len(chunk_data)
+            if hasattr(transport, "flush"):
+                await transport.flush()
 
-        # Send terminal authenticated EOF chunk
-        eof_payload = build_eof_payload(total_bytes, hasher.digest())
-        eof_frame = frame_chunk(
-            session_id=session_id,
-            key=key,
-            base_iv=base_iv,
-            counter=self.send_counter,
-            plaintext=eof_payload,
-            direction=DIRECTION_C2S,
-            final_flag=FLAG_EOF,
-        )
-        await transport.write_frame(eof_frame)
-        self.send_counter += 1
+            return {"total_bytes": total_bytes, "sha256": hasher.hexdigest()}
+        finally:
+            if is_opened_here:
+                stream.close()
 
-        return {"total_bytes": total_bytes, "sha256": hasher.hexdigest()}
-
-    async def receive_payload(self, transport) -> bytes:
+    async def receive_stream(self, transport, destination: Optional[Union[str, Path, BinaryIO]] = None) -> Dict[str, Any]:
         """
-        Receives stream from Server to Client.
+        Genuine streaming receiver: authenticates chunks, writes immediately to destination,
+        maintaining bounded O(1) memory footprint.
         """
         assert self.session_keys is not None, "Handshake not established"
         key = self.session_keys["k_s2c"]
         base_iv = self.session_keys["iv_s2c_base"]
         session_id = self.session_id
 
-        buf = bytearray()
-        hasher = hashlib.sha256()
+        is_opened_here = False
+        target_path: Optional[Path] = None
+        temp_path: Optional[Path] = None
+        if isinstance(destination, (str, Path)):
+            target_path = Path(destination)
+            temp_path = target_path.with_name(f"{target_path.name}.part_{os.getpid()}_{int(time.time()*1000)}")
+            dest_stream = open(temp_path, "wb")
+            is_opened_here = True
+        elif destination is not None and hasattr(destination, "write"):
+            dest_stream = destination
+        else:
+            dest_stream = io.BytesIO()
 
-        while True:
-            frame = await transport.read_frame()
-            # Inspect final_flag from AAD or attempt intermediate first
-            try:
-                chunk, next_cnt = unframe_chunk(
-                    session_id=session_id,
-                    key=key,
-                    base_iv=base_iv,
-                    expected_counter=self.recv_counter,
-                    frame_bytes=frame,
-                    direction=DIRECTION_S2C,
-                    final_flag=FLAG_INTERMEDIATE,
-                )
-                self.recv_counter = next_cnt
-                buf.extend(chunk)
-                hasher.update(chunk)
-            except QSCTamperError:
-                # Try EOF flag
-                chunk, next_cnt = unframe_chunk(
-                    session_id=session_id,
-                    key=key,
-                    base_iv=base_iv,
-                    expected_counter=self.recv_counter,
-                    frame_bytes=frame,
-                    direction=DIRECTION_S2C,
-                    final_flag=FLAG_EOF,
-                )
-                self.recv_counter = next_cnt
-                verify_eof_payload(chunk, len(buf), hasher.digest())
-                break
+        try:
+            total_bytes = 0
+            hasher = hashlib.sha256()
 
-        return bytes(buf)
+            while True:
+                frame = await transport.read_frame()
+                try:
+                    chunk, next_cnt = unframe_chunk(
+                        session_id=session_id,
+                        key=key,
+                        base_iv=base_iv,
+                        expected_counter=self.recv_counter,
+                        frame_bytes=frame,
+                        direction=DIRECTION_S2C,
+                        final_flag=FLAG_INTERMEDIATE,
+                    )
+                    self.recv_counter = next_cnt
+                    total_bytes += len(chunk)
+                    hasher.update(chunk)
+                    dest_stream.write(chunk)
+                except QSCTamperError:
+                    # Authenticate EOF frame
+                    eof_chunk, next_cnt = unframe_chunk(
+                        session_id=session_id,
+                        key=key,
+                        base_iv=base_iv,
+                        expected_counter=self.recv_counter,
+                        frame_bytes=frame,
+                        direction=DIRECTION_S2C,
+                        final_flag=FLAG_EOF,
+                    )
+                    self.recv_counter = next_cnt
+                    verify_eof_payload(eof_chunk, total_bytes, hasher.digest())
+                    break
+
+            res = {"total_bytes": total_bytes, "sha256": hasher.hexdigest()}
+            if destination is None:
+                res["data"] = dest_stream.getvalue()
+            elif is_opened_here and temp_path is not None and target_path is not None:
+                dest_stream.close()
+                is_opened_here = False
+                temp_path.replace(target_path)
+            return res
+        finally:
+            if is_opened_here:
+                dest_stream.close()
+            if temp_path is not None and temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except Exception:
+                    pass
+
+    async def send_payload(self, transport, data: bytes) -> Dict[str, Any]:
+        """Convenience wrapper around send_stream."""
+        return await self.send_stream(transport, data)
+
+    async def receive_payload(self, transport) -> bytes:
+        """Convenience wrapper around receive_stream returning bytes."""
+        res = await self.receive_stream(transport, destination=None)
+        return res["data"]
 
 
 class QSCServer(QSCPeer):
     """
-    Server node accepting connections and completing mutual authentication.
+    Server node accepting connections, verifying ClientAuth, and returning ServerFinished.
     """
 
     async def perform_handshake(self, transport) -> Dict[str, Any]:
-        """
-        Executes Server side of the 1-RTT handshake.
-        """
         t0 = time.perf_counter_ns()
 
         # 1. Read ClientHello
@@ -324,15 +388,23 @@ class QSCServer(QSCPeer):
                 f"Client transcript signature verification failed for '{client_auth.client_id}'"
             )
 
-        # 8. Derive Session Keys & Validate Key Confirmation MAC
+        # 8. Derive Session Keys & Validate Client Finished MAC
         keys = derive_session_keys(
             shared_secret=shared_secret,
             client_nonce=client_hello.nonce,
             server_nonce=server_nonce,
             transcript_2=transcript_2,
         )
-        if keys["mac_confirm"] != client_auth.mac_confirm:
-            raise QSCAuthenticationError("Client key confirmation MAC verification failed.")
+
+        expected_client_mac = compute_finished_mac(keys["k_finished"], "CLIENT", transcript_2)
+        if not hmac.compare_digest(expected_client_mac, client_auth.mac_confirm):
+            raise QSCAuthenticationError("Client Finished MAC confirmation verification failed.")
+
+        # 9. Compute Transcript_3 and Send ServerFinished message
+        transcript_3 = compute_transcript_3(transcript_2, client_auth_wire)
+        server_finished_mac = compute_finished_mac(keys["k_finished"], "SERVER", transcript_3)
+        server_finished = ServerFinished(mac_confirm=server_finished_mac)
+        await transport.write_length_prefixed(server_finished.serialize())
 
         t1 = time.perf_counter_ns()
         self.handshake_latency_ns = t1 - t0
@@ -352,90 +424,139 @@ class QSCServer(QSCPeer):
             "latency_ms": self.handshake_latency_ns / 1_000_000.0,
         }
 
-    async def receive_payload(self, transport) -> bytes:
+    async def receive_stream(self, transport, destination: Optional[Union[str, Path, BinaryIO]] = None) -> Dict[str, Any]:
         """
-        Receives stream from Client to Server.
+        Genuine streaming receiver: authenticates chunks and writes directly to file/stream.
         """
         assert self.session_keys is not None, "Handshake not established"
         key = self.session_keys["k_c2s"]
         base_iv = self.session_keys["iv_c2s_base"]
         session_id = self.session_id
 
-        buf = bytearray()
-        hasher = hashlib.sha256()
+        is_opened_here = False
+        target_path: Optional[Path] = None
+        temp_path: Optional[Path] = None
+        if isinstance(destination, (str, Path)):
+            target_path = Path(destination)
+            temp_path = target_path.with_name(f"{target_path.name}.part_{os.getpid()}_{int(time.time()*1000)}")
+            dest_stream = open(temp_path, "wb")
+            is_opened_here = True
+        elif destination is not None and hasattr(destination, "write"):
+            dest_stream = destination
+        else:
+            dest_stream = io.BytesIO()
 
-        while True:
-            frame = await transport.read_frame()
-            try:
-                chunk, next_cnt = unframe_chunk(
-                    session_id=session_id,
-                    key=key,
-                    base_iv=base_iv,
-                    expected_counter=self.recv_counter,
-                    frame_bytes=frame,
-                    direction=DIRECTION_C2S,
-                    final_flag=FLAG_INTERMEDIATE,
-                )
-                self.recv_counter = next_cnt
-                buf.extend(chunk)
-                hasher.update(chunk)
-            except QSCTamperError:
-                # Try EOF flag
-                chunk, next_cnt = unframe_chunk(
-                    session_id=session_id,
-                    key=key,
-                    base_iv=base_iv,
-                    expected_counter=self.recv_counter,
-                    frame_bytes=frame,
-                    direction=DIRECTION_C2S,
-                    final_flag=FLAG_EOF,
-                )
-                self.recv_counter = next_cnt
-                verify_eof_payload(chunk, len(buf), hasher.digest())
-                break
+        try:
+            total_bytes = 0
+            hasher = hashlib.sha256()
 
-        return bytes(buf)
+            while True:
+                frame = await transport.read_frame()
+                try:
+                    chunk, next_cnt = unframe_chunk(
+                        session_id=session_id,
+                        key=key,
+                        base_iv=base_iv,
+                        expected_counter=self.recv_counter,
+                        frame_bytes=frame,
+                        direction=DIRECTION_C2S,
+                        final_flag=FLAG_INTERMEDIATE,
+                    )
+                    self.recv_counter = next_cnt
+                    total_bytes += len(chunk)
+                    hasher.update(chunk)
+                    dest_stream.write(chunk)
+                except QSCTamperError:
+                    eof_chunk, next_cnt = unframe_chunk(
+                        session_id=session_id,
+                        key=key,
+                        base_iv=base_iv,
+                        expected_counter=self.recv_counter,
+                        frame_bytes=frame,
+                        direction=DIRECTION_C2S,
+                        final_flag=FLAG_EOF,
+                    )
+                    self.recv_counter = next_cnt
+                    verify_eof_payload(eof_chunk, total_bytes, hasher.digest())
+                    break
 
-    async def send_payload(self, transport, data: bytes) -> Dict[str, Any]:
+            res = {"total_bytes": total_bytes, "sha256": hasher.hexdigest()}
+            if destination is None:
+                res["data"] = dest_stream.getvalue()
+            elif is_opened_here and temp_path is not None and target_path is not None:
+                dest_stream.close()
+                is_opened_here = False
+                temp_path.replace(target_path)
+            return res
+        finally:
+            if is_opened_here:
+                dest_stream.close()
+            if temp_path is not None and temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except Exception:
+                    pass
+
+    async def send_stream(self, transport, source: Union[bytes, str, Path, BinaryIO]) -> Dict[str, Any]:
         """
-        Streams data in 64 KB authenticated chunks from Server to Client.
+        Genuine streaming sender from Server to Client.
         """
         assert self.session_keys is not None, "Handshake not established"
         key = self.session_keys["k_s2c"]
         base_iv = self.session_keys["iv_s2c_base"]
         session_id = self.session_id
 
-        total_bytes = len(data)
-        hasher = hashlib.sha256()
-        offset = 0
+        is_opened_here = False
+        if isinstance(source, (str, Path)):
+            stream = open(source, "rb")
+            is_opened_here = True
+        elif hasattr(source, "read"):
+            stream = source
+        else:
+            stream = io.BytesIO(source)
 
-        while offset < total_bytes:
-            chunk_data = data[offset : offset + MAX_CHUNK_PLAINTEXT_SIZE]
-            hasher.update(chunk_data)
-            frame = frame_chunk(
+        try:
+            total_bytes = 0
+            hasher = hashlib.sha256()
+
+            while chunk := stream.read(MAX_CHUNK_PLAINTEXT_SIZE):
+                total_bytes += len(chunk)
+                hasher.update(chunk)
+                frame = frame_chunk(
+                    session_id=session_id,
+                    key=key,
+                    base_iv=base_iv,
+                    counter=self.send_counter,
+                    plaintext=chunk,
+                    direction=DIRECTION_S2C,
+                    final_flag=FLAG_INTERMEDIATE,
+                )
+                await transport.write_frame(frame)
+                self.send_counter += 1
+
+            eof_payload = build_eof_payload(total_bytes, hasher.digest())
+            eof_frame = frame_chunk(
                 session_id=session_id,
                 key=key,
                 base_iv=base_iv,
                 counter=self.send_counter,
-                plaintext=chunk_data,
+                plaintext=eof_payload,
                 direction=DIRECTION_S2C,
-                final_flag=FLAG_INTERMEDIATE,
+                final_flag=FLAG_EOF,
             )
-            await transport.write_frame(frame)
+            await transport.write_frame(eof_frame)
             self.send_counter += 1
-            offset += len(chunk_data)
+            if hasattr(transport, "flush"):
+                await transport.flush()
 
-        eof_payload = build_eof_payload(total_bytes, hasher.digest())
-        eof_frame = frame_chunk(
-            session_id=session_id,
-            key=key,
-            base_iv=base_iv,
-            counter=self.send_counter,
-            plaintext=eof_payload,
-            direction=DIRECTION_S2C,
-            final_flag=FLAG_EOF,
-        )
-        await transport.write_frame(eof_frame)
-        self.send_counter += 1
+            return {"total_bytes": total_bytes, "sha256": hasher.hexdigest()}
+        finally:
+            if is_opened_here:
+                stream.close()
 
-        return {"total_bytes": total_bytes, "sha256": hasher.hexdigest()}
+    async def receive_payload(self, transport) -> bytes:
+        res = await self.receive_stream(transport, destination=None)
+        return res["data"]
+
+    async def send_payload(self, transport, data: bytes) -> Dict[str, Any]:
+        return await self.send_stream(transport, data)

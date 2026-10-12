@@ -15,18 +15,18 @@
     "swap_bytes": 0
   },
   "network_configuration": {
-    "interface": "lo",
+    "interface": "veth",
     "mtu_bytes": 1500,
     "added_latency_ms": 15.0,
     "jitter_ms": 3.0,
     "packet_loss_percent": 0.01,
-    "emulation_tool": "tc qdisc add dev lo root netem delay 15ms 3ms",
-    "fragmentation_hypothesis": "Classical ECDH/ECDSA (64B/64B) fits in a single 1500B MTU frame. ML-KEM-768 PK (1,184B) + ML-DSA-65 sig (3,309B) forces IP fragmentation and multi-segment TCP reassembly, compounding latency with network jitter."
+    "emulation_tool": "tc qdisc replace dev veth_cli root netem delay 15ms 3ms",
+    "fragmentation_hypothesis": "Classical ECDH/ECDSA (64B/64B) fits in a single 1500B MTU frame. ML-KEM-768 PK (1,184B) + ML-DSA-65 sig (3,309B) forces TCP segmentation (TCP MSS 1460B) across MTU boundaries and multi-segment TCP reassembly, compounding latency with network jitter."
   },
   "benchmarking_parameters": {
     "warmup_runs": 10,
     "handshake_trials": 100,
-    "payload_trials": 30,
+    "payload_trials": 100,
     "payload_sizes_bytes": [1024, 102400, 10485760]
   }
 }

@@ -1,0 +1,16 @@
+File,SLOC,Total Lines,Bytes
+__init__.py,6,7,245
+attacker.py,153,198,7722
+benchmark.py,966,1185,45747
+cli.py,170,220,8557
+crypto_suite.py,324,413,14993
+metrics.py,208,256,7962
+peer.py,470,562,21257
+problem.py,109,131,4264
+processors.py,78,97,3123
+protocol.py,296,366,12671
+routing.py,68,81,2342
+transport.py,145,176,6194
+trust_store.py,157,187,6189
+visualization.py,224,292,13463
+TOTAL,3374,4171,154729

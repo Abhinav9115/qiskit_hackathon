@@ -12,6 +12,7 @@ from src.crypto_suite import (
     PQCKeyEncapsulation,
     PQCSignature,
     derive_session_keys,
+    compute_finished_mac,
     aes_gcm_encrypt,
     aes_gcm_decrypt,
     compute_chunk_iv,
@@ -80,11 +81,18 @@ def test_hkdf_session_key_derivation():
     assert len(keys["k_s2c"]) == 32
     assert len(keys["iv_c2s_base"]) == 12
     assert len(keys["iv_s2c_base"]) == 12
-    assert len(keys["mac_confirm"]) == 32
+    assert len(keys["k_finished"]) == 32
     assert len(keys["session_id"]) == 32
     # Distinct directional keys
     assert keys["k_c2s"] != keys["k_s2c"]
     assert keys["iv_c2s_base"] != keys["iv_s2c_base"]
+
+    # Verify compute_finished_mac produces 32-byte HMAC
+    mac_client = compute_finished_mac(keys["k_finished"], "client", tr2)
+    mac_server = compute_finished_mac(keys["k_finished"], "server", tr2)
+    assert len(mac_client) == 32
+    assert len(mac_server) == 32
+    assert mac_client != mac_server
 
 
 def test_aes_gcm_aead_roundtrip():
