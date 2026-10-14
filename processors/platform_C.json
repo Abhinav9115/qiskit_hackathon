@@ -1,0 +1,11 @@
+{
+  "key": "C",
+  "name": "Platform C",
+  "role": "edge device (limited CPU and memory)",
+  "status": "DEFINED - Track 5 standardized platform specification: Edge device (limited CPU/RAM)",
+  "cpu_cores": 1,
+  "mem_budget_mb": 8,
+  "chunk_bytes": 16384,
+  "param_set": "pqc-L3",
+  "description": "Headline 'edge' case: 1 CPU core (affinity-pinned), 8 MB working-set budget, 16 KiB streaming records."
+}

@@ -1,0 +1,59 @@
+{
+  "experiment": "supplemental star-GHZ-5 architecture probe",
+  "scope": "Qiskit processor-architecture study; not a quantum execution of the classical PS-P1 PQC channel",
+  "qiskit_version": "2.5.2",
+  "qiskit_aer_version": "0.17.2",
+  "shots": 4096,
+  "seed": 42,
+  "transpilation": {
+    "basis_gates": [
+      "rz",
+      "sx",
+      "x",
+      "cx"
+    ],
+    "optimization_level": 1,
+    "layout_method": "sabre",
+    "routing_method": "sabre"
+  },
+  "noise": {
+    "single_qubit_depolarizing": 0.001,
+    "cx_depolarizing": 0.005,
+    "readout_bitflip": 0.01
+  },
+  "processors": [
+    {
+      "processor": "A",
+      "processor_name": "Processor A (5-qubit chain - required)",
+      "logical_qubits": 5,
+      "physical_qubits_available": 5,
+      "physical_qubits_used": 5,
+      "cx_count": 10,
+      "depth": 14,
+      "swap_count": 2,
+      "shots": 4096,
+      "p_success_ideal": 1.0,
+      "p_success_noisy": 0.919677734375,
+      "noisy_standard_error": 0.004246741606793361,
+      "seed_transpiler": 42,
+      "seed_simulator": 42
+    },
+    {
+      "processor": "B",
+      "processor_name": "Processor B (9-qubit sparse graph - required)",
+      "logical_qubits": 5,
+      "physical_qubits_available": 9,
+      "physical_qubits_used": 5,
+      "cx_count": 7,
+      "depth": 11,
+      "swap_count": 1,
+      "shots": 4096,
+      "p_success_ideal": 1.0,
+      "p_success_noisy": 0.931640625,
+      "noisy_standard_error": 0.003943149804814092,
+      "seed_transpiler": 42,
+      "seed_simulator": 42
+    }
+  ],
+  "logical_circuit": "     \u250c\u2500\u2500\u2500\u2510                             \u250c\u2500\u2510   \nq_0: \u2524 H \u251c\u2500\u2500\u25a0\u2500\u2500\u2500\u2500\u25a0\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25a0\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25a0\u2500\u2500\u2500\u2500\u2500\u2524M\u251c\u2500\u2500\u2500\n     \u2514\u2500\u2500\u2500\u2518\u250c\u2500\u2534\u2500\u2510  \u2502  \u250c\u2500\u2510  \u2502       \u2502     \u2514\u2565\u2518   \nq_1: \u2500\u2500\u2500\u2500\u2500\u2524 X \u251c\u2500\u2500\u253c\u2500\u2500\u2524M\u251c\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u256b\u2500\u2500\u2500\u2500\n          \u2514\u2500\u2500\u2500\u2518\u250c\u2500\u2534\u2500\u2510\u2514\u2565\u2518  \u2502  \u250c\u2500\u2510  \u2502      \u2551    \nq_2: \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524 X \u251c\u2500\u256b\u2500\u2500\u2500\u253c\u2500\u2500\u2524M\u251c\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u256b\u2500\u2500\u2500\u2500\n               \u2514\u2500\u2500\u2500\u2518 \u2551 \u250c\u2500\u2534\u2500\u2510\u2514\u2565\u2518  \u2502  \u250c\u2500\u2510 \u2551    \nq_3: \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256b\u2500\u2524 X \u251c\u2500\u256b\u2500\u2500\u2500\u253c\u2500\u2500\u2524M\u251c\u2500\u256b\u2500\u2500\u2500\u2500\n                     \u2551 \u2514\u2500\u2500\u2500\u2518 \u2551 \u250c\u2500\u2534\u2500\u2510\u2514\u2565\u2518 \u2551 \u250c\u2500\u2510\nq_4: \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256b\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256b\u2500\u2524 X \u251c\u2500\u256b\u2500\u2500\u256b\u2500\u2524M\u251c\n                     \u2551       \u2551 \u2514\u2500\u2500\u2500\u2518 \u2551  \u2551 \u2514\u2565\u2518\nc: 5/\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2569\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2569\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2569\u2550\u2550\u2569\u2550\u2550\u2569\u2550\n                     1       2       3  0  4 "
+}

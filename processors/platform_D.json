@@ -1,0 +1,11 @@
+{
+  "key": "D",
+  "name": "Platform D (custom)",
+  "role": "embedded gateway with a tuned record size",
+  "status": "CUSTOM DESIGN - chunk size justified by results/tables/chunk_sweep.csv (see report.md, Platform D section)",
+  "cpu_cores": 1,
+  "mem_budget_mb": 8,
+  "chunk_bytes": 65536,
+  "param_set": "pqc-L3",
+  "description": "Same hardware budget as Platform C (1 core, 8 MB) but the record size is chosen by a rule fixed in advance on results/tables/chunk_sweep.csv: the smallest record size reaching >=90% of the best in-budget throughput. Trade-off: fewer records, less per-record overhead and CPU time versus a larger working set and a larger retransmission unit."
+}

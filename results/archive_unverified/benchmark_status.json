@@ -1,0 +1,10 @@
+{
+ "measured_sets": [
+  "classical-p256",
+  "pqc-L3",
+  "hybrid-L3"
+ ],
+ "skipped_sets": {},
+ "quick": true,
+ "seed_payloads_only": 42
+}

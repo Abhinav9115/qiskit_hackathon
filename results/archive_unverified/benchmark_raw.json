@@ -1,0 +1,2861 @@
+[
+ {
+  "platform": "A",
+  "param_set": "classical-p256",
+  "payload": "1KB",
+  "handshake_ms": [
+   1.4261999967857264,
+   1.3503999980457593,
+   1.038200000039069,
+   1.1028000008082017,
+   1.0111999981745612,
+   0.9921000018948689,
+   1.5166000011959113,
+   1.973799997358583,
+   1.245399998879293,
+   1.1876999997184612,
+   1.2027000011585187,
+   0.996599999780301
+  ],
+  "transfer_ms": [
+   0.2421000026515685,
+   0.22250000256462954,
+   0.22039999748812988,
+   0.18260000069858506,
+   0.22030000036465935,
+   0.1742999993439298,
+   0.28359999851090834,
+   0.23940000028233044,
+   0.19220000103814527,
+   0.1878000002761837,
+   0.16909999976633117,
+   0.17840000145952217
+  ],
+  "encrypt_ms": [
+   0.0091,
+   0.0114,
+   0.0103,
+   0.0097,
+   0.0066,
+   0.0092,
+   0.0133,
+   0.0098,
+   0.0097,
+   0.009,
+   0.0089,
+   0.0074
+  ],
+  "decrypt_ms": [
+   0.0238,
+   0.0166,
+   0.0181,
+   0.0214,
+   0.0388,
+   0.0237,
+   0.0187,
+   0.0206,
+   0.0166,
+   0.0181,
+   0.0129,
+   0.0187
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.00935,
+   "client_kem_decaps": 0.09054999999999999,
+   "client_kem_keygen": 0.07694999999999999,
+   "client_sign": 0.07285,
+   "client_verify": 0.11005000000000001,
+   "server_hkdf": 0.01385,
+   "server_kem_encaps": 0.1123,
+   "server_sign": 0.057300000000000004,
+   "server_verify": 0.1082
+  },
+  "sizes": {
+   "size_client_hello": 229,
+   "size_kem_pk": 65,
+   "size_sig_client": 71,
+   "size_server_hello": 185,
+   "size_kem_ct": 65,
+   "size_sig_server": 72
+  },
+  "bytes_handshake": 528,
+  "bytes_records": 1045,
+  "bytes_total": 1573,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 76.0,
+  "base_rss_kb": 29892.0,
+  "tracemalloc_peak_kb": 18.2783203125,
+  "cpu_affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ]
+ },
+ {
+  "platform": "A",
+  "param_set": "classical-p256",
+  "payload": "100KB",
+  "handshake_ms": [
+   1.4324999974633101,
+   1.6113999990921002,
+   1.5515999984927475,
+   1.074499999958789,
+   1.0045999988506082,
+   1.164900000730995,
+   1.1676000031002332,
+   1.1124999982712325
+  ],
+  "transfer_ms": [
+   0.4750000007334165,
+   0.6382999999914318,
+   0.5453999983728863,
+   0.42979999852832407,
+   0.3556000010576099,
+   0.49389999912818894,
+   0.4135999988648109,
+   0.4592000004777219
+  ],
+  "encrypt_ms": [
+   0.0653,
+   0.0512,
+   0.0633,
+   0.043,
+   0.0288,
+   0.0981,
+   0.0445,
+   0.057
+  ],
+  "decrypt_ms": [
+   0.0482,
+   0.0894,
+   0.0913,
+   0.038,
+   0.0506,
+   0.0914,
+   0.0477,
+   0.0343
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0072,
+   "client_kem_decaps": 0.08985000000000001,
+   "client_kem_keygen": 0.0817,
+   "client_sign": 0.07995,
+   "client_verify": 0.10200000000000001,
+   "server_hkdf": 0.0134,
+   "server_kem_encaps": 0.11235,
+   "server_sign": 0.060200000000000004,
+   "server_verify": 0.1184
+  },
+  "sizes": {
+   "size_client_hello": 229,
+   "size_kem_pk": 65,
+   "size_sig_client": 71,
+   "size_server_hello": 184,
+   "size_kem_ct": 65,
+   "size_sig_server": 71
+  },
+  "bytes_handshake": 527,
+  "bytes_records": 102421,
+  "bytes_total": 102948,
+  "payload_bytes": 102400,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 432.0,
+  "base_rss_kb": 29856.0,
+  "tracemalloc_peak_kb": 308.1875,
+  "cpu_affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ]
+ },
+ {
+  "platform": "A",
+  "param_set": "classical-p256",
+  "payload": "10MB",
+  "handshake_ms": [
+   2.3050000017974526,
+   3.646899996965658,
+   1.6823999976622872
+  ],
+  "transfer_ms": [
+   31.55749999859836,
+   29.324500002985587,
+   29.58990000115591
+  ],
+  "encrypt_ms": [
+   4.4205,
+   4.742,
+   4.4653
+  ],
+  "decrypt_ms": [
+   4.2902,
+   4.1049,
+   4.0734
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0165,
+   "client_kem_decaps": 0.1339,
+   "client_kem_keygen": 0.1479,
+   "client_sign": 0.1323,
+   "client_verify": 0.1439,
+   "server_hkdf": 0.0287,
+   "server_kem_encaps": 0.2036,
+   "server_sign": 0.1119,
+   "server_verify": 0.1809
+  },
+  "sizes": {
+   "size_client_hello": 228,
+   "size_kem_pk": 65,
+   "size_sig_client": 70,
+   "size_server_hello": 184,
+   "size_kem_ct": 65,
+   "size_sig_server": 71
+  },
+  "bytes_handshake": 526,
+  "bytes_records": 10485781,
+  "bytes_total": 10486307,
+  "payload_bytes": 10485760,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 30760.0,
+  "base_rss_kb": 29940.0,
+  "tracemalloc_peak_kb": 30728.6943359375,
+  "cpu_affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ]
+ },
+ {
+  "platform": "A",
+  "param_set": "pqc-L3",
+  "payload": "1KB",
+  "handshake_ms": [
+   0.8885000024747569,
+   0.91229999816278,
+   0.6821999995736405,
+   0.6758000017725863,
+   0.6017000014253426,
+   0.5748999974457547,
+   0.5506999987119343,
+   0.6200999996508472,
+   0.5233000010775868,
+   0.6085999993956648,
+   0.5467999981192406,
+   0.5850000015925616
+  ],
+  "transfer_ms": [
+   0.46909999946365133,
+   0.5669999991368968,
+   0.3763999993680045,
+   0.26059999800054356,
+   0.2716000017244369,
+   0.1838000025600195,
+   0.180200000613695,
+   0.189200000022538,
+   0.1818999990064185,
+   0.14559999908669852,
+   0.2103000006172806,
+   0.17769999976735562
+  ],
+  "encrypt_ms": [
+   0.0139,
+   0.0268,
+   0.0103,
+   0.0085,
+   0.0102,
+   0.0108,
+   0.0095,
+   0.0086,
+   0.0066,
+   0.0084,
+   0.0084,
+   0.0083
+  ],
+  "decrypt_ms": [
+   0.0218,
+   0.0242,
+   0.0123,
+   0.0161,
+   0.0146,
+   0.0146,
+   0.0263,
+   0.0126,
+   0.0174,
+   0.0146,
+   0.0181,
+   0.0164
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01735,
+   "client_kem_decaps": 0.0089,
+   "client_kem_keygen": 0.01115,
+   "client_sign": 0.018000000000000002,
+   "client_verify": 0.0167,
+   "server_hkdf": 0.022699999999999998,
+   "server_kem_encaps": 0.012,
+   "server_sign": 0.0055,
+   "server_verify": 0.02145
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 1045,
+  "bytes_total": 10188,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 60.0,
+  "base_rss_kb": 28228.0,
+  "tracemalloc_peak_kb": 57.6689453125,
+  "cpu_affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ]
+ },
+ {
+  "platform": "A",
+  "param_set": "pqc-L3",
+  "payload": "100KB",
+  "handshake_ms": [
+   0.8465999999316409,
+   0.7829999995010439,
+   0.5898999988858122,
+   1.0134000003745314,
+   0.6817000030423515,
+   0.6386999993992504,
+   0.5319999982020818,
+   0.5468000017572194
+  ],
+  "transfer_ms": [
+   0.4687000000558328,
+   0.4169999992882367,
+   8.906700000807177,
+   0.42380000013508834,
+   0.35489999936544336,
+   0.28340000062598847,
+   0.3262999998696614,
+   0.4574999984470196
+  ],
+  "encrypt_ms": [
+   0.0587,
+   0.0389,
+   0.0261,
+   0.0437,
+   0.0389,
+   0.0319,
+   0.0295,
+   0.0373
+  ],
+  "decrypt_ms": [
+   0.0588,
+   0.1079,
+   0.1051,
+   0.0468,
+   0.0367,
+   0.0328,
+   0.0302,
+   0.0455
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01675,
+   "client_kem_decaps": 0.009850000000000001,
+   "client_kem_keygen": 0.011449999999999998,
+   "client_sign": 0.0157,
+   "client_verify": 0.01595,
+   "server_hkdf": 0.023,
+   "server_kem_encaps": 0.0169,
+   "server_sign": 0.0056,
+   "server_verify": 0.02185
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 102421,
+  "bytes_total": 111564,
+  "payload_bytes": 102400,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 440.0,
+  "base_rss_kb": 28144.0,
+  "tracemalloc_peak_kb": 308.1796875,
+  "cpu_affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ]
+ },
+ {
+  "platform": "A",
+  "param_set": "pqc-L3",
+  "payload": "10MB",
+  "handshake_ms": [
+   1.5751999999338295,
+   1.5877999976510182,
+   1.5002000000094995
+  ],
+  "transfer_ms": [
+   30.322099999466445,
+   28.0153000021528,
+   28.580399997736095
+  ],
+  "encrypt_ms": [
+   6.1771,
+   4.4504,
+   4.9159
+  ],
+  "decrypt_ms": [
+   4.313,
+   4.151,
+   4.7975
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0336,
+   "client_kem_decaps": 0.0291,
+   "client_kem_keygen": 0.0415,
+   "client_sign": 0.0371,
+   "client_verify": 0.0247,
+   "server_hkdf": 0.0548,
+   "server_kem_encaps": 0.0196,
+   "server_sign": 0.0082,
+   "server_verify": 0.0348
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 10485781,
+  "bytes_total": 10494924,
+  "payload_bytes": 10485760,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 30764.0,
+  "base_rss_kb": 28072.0,
+  "tracemalloc_peak_kb": 30728.9365234375,
+  "cpu_affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ]
+ },
+ {
+  "platform": "A",
+  "param_set": "hybrid-L3",
+  "payload": "1KB",
+  "handshake_ms": [
+   1.2110999996366445,
+   0.9176999992632773,
+   0.9621999997762032,
+   0.9284999978262931,
+   0.8707999986654613,
+   1.330999999481719,
+   1.612099997146288,
+   0.9368999999423977,
+   0.8381000006920658,
+   0.9098000009544194,
+   0.8181000011973083,
+   1.2004999989585485
+  ],
+  "transfer_ms": [
+   0.2702999991015531,
+   0.32330000249203295,
+   0.2553000012994744,
+   0.18249999993713573,
+   0.13019999823882245,
+   0.4728999992948957,
+   0.2706000013859011,
+   0.1889000013761688,
+   0.16340000001946464,
+   0.16029999824240804,
+   0.15779999739606865,
+   0.21529999867198057
+  ],
+  "encrypt_ms": [
+   0.031,
+   0.0099,
+   0.0088,
+   0.0102,
+   0.0072,
+   0.0117,
+   0.0105,
+   0.0191,
+   0.0084,
+   0.0074,
+   0.01,
+   0.0121
+  ],
+  "decrypt_ms": [
+   0.0111,
+   0.0148,
+   0.0194,
+   0.0145,
+   0.0137,
+   0.0214,
+   0.0203,
+   0.021,
+   0.0207,
+   0.0242,
+   0.0107,
+   0.0204
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01325,
+   "client_kem_decaps": 0.1316,
+   "client_kem_keygen": 0.07400000000000001,
+   "client_sign": 0.012650000000000002,
+   "client_verify": 0.01685,
+   "server_hkdf": 0.02365,
+   "server_kem_encaps": 0.15410000000000001,
+   "server_sign": 0.0071,
+   "server_verify": 0.019
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 1045,
+  "bytes_total": 10329,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 44.0,
+  "base_rss_kb": 29272.0,
+  "tracemalloc_peak_kb": 58.654296875,
+  "cpu_affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ]
+ },
+ {
+  "platform": "A",
+  "param_set": "hybrid-L3",
+  "payload": "100KB",
+  "handshake_ms": [
+   1.3730999999097548,
+   1.0431000009702984,
+   0.8963000000221655,
+   1.039300001139054,
+   0.857000002724817,
+   1.6729999988456257,
+   1.3049000008322764,
+   1.2362999987090006
+  ],
+  "transfer_ms": [
+   0.48579999929643236,
+   0.379699999029981,
+   0.2585000002000015,
+   0.30789999800617807,
+   16.794899998785695,
+   0.6729000015184283,
+   0.5584999998973217,
+   0.5046000005677342
+  ],
+  "encrypt_ms": [
+   0.0859,
+   0.036,
+   0.027,
+   0.0304,
+   0.0328,
+   0.0426,
+   0.044,
+   0.112
+  ],
+  "decrypt_ms": [
+   0.0566,
+   0.0314,
+   0.0276,
+   0.036,
+   0.1111,
+   0.0447,
+   0.121,
+   0.0468
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0157,
+   "client_kem_decaps": 0.1313,
+   "client_kem_keygen": 0.09375,
+   "client_sign": 0.0137,
+   "client_verify": 0.0182,
+   "server_hkdf": 0.0199,
+   "server_kem_encaps": 0.1672,
+   "server_sign": 0.00775,
+   "server_verify": 0.02095
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 102421,
+  "bytes_total": 111705,
+  "payload_bytes": 102400,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 440.0,
+  "base_rss_kb": 29356.0,
+  "tracemalloc_peak_kb": 408.01953125,
+  "cpu_affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ]
+ },
+ {
+  "platform": "A",
+  "param_set": "hybrid-L3",
+  "payload": "10MB",
+  "handshake_ms": [
+   1.2328000011621043,
+   1.2844999982917216,
+   1.5352000009443145
+  ],
+  "transfer_ms": [
+   29.240700001537334,
+   29.211600001872284,
+   32.24450000197976
+  ],
+  "encrypt_ms": [
+   5.6603,
+   5.3551,
+   5.3742
+  ],
+  "decrypt_ms": [
+   5.5683,
+   4.4079,
+   5.7791
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0164,
+   "client_kem_decaps": 0.1544,
+   "client_kem_keygen": 0.1358,
+   "client_sign": 0.0216,
+   "client_verify": 0.0259,
+   "server_hkdf": 0.0393,
+   "server_kem_encaps": 0.2048,
+   "server_sign": 0.0078,
+   "server_verify": 0.0208
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 10485781,
+  "bytes_total": 10495065,
+  "payload_bytes": 10485760,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 30756.0,
+  "base_rss_kb": 29292.0,
+  "tracemalloc_peak_kb": 30728.6865234375,
+  "cpu_affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ]
+ },
+ {
+  "platform": "B",
+  "param_set": "classical-p256",
+  "payload": "1KB",
+  "handshake_ms": [
+   1.7193999992741738,
+   1.580100000865059,
+   1.6528000014659483,
+   1.608399998076493,
+   1.556000002892688,
+   3.2191999998758547,
+   2.0092000013391953,
+   1.604699999006698,
+   1.465900000766851,
+   1.6194999989238568,
+   1.5805000002728775,
+   1.4311000013549346
+  ],
+  "transfer_ms": [
+   0.012200001947348937,
+   0.013200002285884693,
+   0.02429999949526973,
+   0.01590000101714395,
+   0.012900000001536682,
+   0.01939999856404029,
+   0.012799999240087345,
+   0.01420000262442045,
+   0.011000000085914508,
+   0.011399999493733048,
+   0.014500001270789653,
+   0.011000000085914508
+  ],
+  "encrypt_ms": [
+   0.0081,
+   0.0088,
+   0.0097,
+   0.0083,
+   0.0082,
+   0.0126,
+   0.0085,
+   0.0089,
+   0.0071,
+   0.0091,
+   0.0082,
+   0.007
+  ],
+  "decrypt_ms": [
+   0.0061,
+   0.0068,
+   0.0128,
+   0.0079,
+   0.0071,
+   0.0111,
+   0.0061,
+   0.0067,
+   0.0063,
+   0.0068,
+   0.0081,
+   0.0061
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.00955,
+   "client_kem_decaps": 0.0766,
+   "client_kem_keygen": 0.05205,
+   "client_sign": 0.06815,
+   "client_verify": 0.07239999999999999,
+   "server_hkdf": 0.0054,
+   "server_kem_encaps": 0.0973,
+   "server_sign": 0.05325,
+   "server_verify": 0.08305
+  },
+  "sizes": {
+   "size_client_hello": 229,
+   "size_kem_pk": 65,
+   "size_sig_client": 71,
+   "size_server_hello": 184,
+   "size_kem_ct": 65,
+   "size_sig_server": 71
+  },
+  "bytes_handshake": 527,
+  "bytes_records": 1045,
+  "bytes_total": 1572,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 1120.0,
+  "base_rss_kb": 29756.0,
+  "tracemalloc_peak_kb": 1042.2099609375,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "B",
+  "param_set": "classical-p256",
+  "payload": "100KB",
+  "handshake_ms": [
+   2.5896000006468967,
+   1.7905999993672594,
+   1.8462999978510197,
+   1.9746999969356693,
+   1.574800000526011,
+   1.6159999977389816,
+   3.470699997706106,
+   1.9732000000658445
+  ],
+  "transfer_ms": [
+   0.16210000103455968,
+   0.08729999899514951,
+   0.1489000023866538,
+   0.09660000068834051,
+   0.08689999958733097,
+   0.0932000002649147,
+   0.100200002634665,
+   0.09870000212686136
+  ],
+  "encrypt_ms": [
+   0.0668,
+   0.0284,
+   0.1156,
+   0.0316,
+   0.0256,
+   0.0284,
+   0.0566,
+   0.0305
+  ],
+  "decrypt_ms": [
+   0.0795,
+   0.0275,
+   0.0509,
+   0.0317,
+   0.0279,
+   0.0273,
+   0.032,
+   0.0386
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0114,
+   "client_kem_decaps": 0.0784,
+   "client_kem_keygen": 0.06420000000000001,
+   "client_sign": 0.07575000000000001,
+   "client_verify": 0.0761,
+   "server_hkdf": 0.00625,
+   "server_kem_encaps": 0.09905,
+   "server_sign": 0.0641,
+   "server_verify": 0.08574999999999999
+  },
+  "sizes": {
+   "size_client_hello": 228,
+   "size_kem_pk": 65,
+   "size_sig_client": 70,
+   "size_server_hello": 185,
+   "size_kem_ct": 65,
+   "size_sig_server": 72
+  },
+  "bytes_handshake": 527,
+  "bytes_records": 102421,
+  "bytes_total": 102948,
+  "payload_bytes": 102400,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 1360.0,
+  "base_rss_kb": 29860.0,
+  "tracemalloc_peak_kb": 1141.5927734375,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "B",
+  "param_set": "classical-p256",
+  "payload": "10MB",
+  "handshake_ms": [
+   4.707399999460904,
+   5.098699999507517,
+   5.982300001051044
+  ],
+  "transfer_ms": [
+   26.778000003105262,
+   27.57479999854695,
+   27.350799999112496
+  ],
+  "encrypt_ms": [
+   4.9899,
+   5.3683,
+   4.9752
+  ],
+  "decrypt_ms": [
+   5.2283,
+   5.3212,
+   5.0522
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0232,
+   "client_kem_decaps": 0.1359,
+   "client_kem_keygen": 0.1557,
+   "client_sign": 0.1955,
+   "client_verify": 0.1076,
+   "server_hkdf": 0.0097,
+   "server_kem_encaps": 0.2264,
+   "server_sign": 0.0899,
+   "server_verify": 0.1764
+  },
+  "sizes": {
+   "size_client_hello": 229,
+   "size_kem_pk": 65,
+   "size_sig_client": 71,
+   "size_server_hello": 183,
+   "size_kem_ct": 65,
+   "size_sig_server": 70
+  },
+  "bytes_handshake": 526,
+  "bytes_records": 10485970,
+  "bytes_total": 10486496,
+  "payload_bytes": 10485760,
+  "n_records": 11,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 5632.0,
+  "base_rss_kb": 29744.0,
+  "tracemalloc_peak_kb": 6161.0830078125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "B",
+  "param_set": "pqc-L3",
+  "payload": "1KB",
+  "handshake_ms": [
+   1.078999997844221,
+   1.0597000000416301,
+   1.6127999988384545,
+   1.821500001824461,
+   1.2172000024293084,
+   1.1402999989513773,
+   1.101000001654029,
+   1.0641999979270622,
+   1.0553000029176474,
+   1.080599999113474,
+   1.1612000016612,
+   1.3899000005039852
+  ],
+  "transfer_ms": [
+   0.01170000177808106,
+   0.011200001608813182,
+   0.01710000287857838,
+   0.012900000001536682,
+   0.012000000424450263,
+   0.012399999832268804,
+   0.010199997632298619,
+   0.010799998563015833,
+   0.010399999155197293,
+   0.010300002031726763,
+   0.010199997632298619,
+   0.010100000508828089
+  ],
+  "encrypt_ms": [
+   0.0084,
+   0.0067,
+   0.0118,
+   0.0127,
+   0.0069,
+   0.0075,
+   0.0071,
+   0.0068,
+   0.0069,
+   0.0069,
+   0.0081,
+   0.007
+  ],
+  "decrypt_ms": [
+   0.0063,
+   0.0061,
+   0.0095,
+   0.0093,
+   0.0059,
+   0.0063,
+   0.0056,
+   0.0055,
+   0.0055,
+   0.0058,
+   0.0057,
+   0.0062
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01635,
+   "client_kem_decaps": 0.0056500000000000005,
+   "client_kem_keygen": 0.008199999999999999,
+   "client_sign": 0.01145,
+   "client_verify": 0.0071,
+   "server_hkdf": 0.00875,
+   "server_kem_encaps": 0.01,
+   "server_sign": 0.0047,
+   "server_verify": 0.0108
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 1045,
+  "bytes_total": 10188,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 1044.0,
+  "base_rss_kb": 28040.0,
+  "tracemalloc_peak_kb": 1061.1513671875,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "B",
+  "param_set": "pqc-L3",
+  "payload": "100KB",
+  "handshake_ms": [
+   1.3426999976218212,
+   1.5573000018775929,
+   1.2783999991370365,
+   1.1750000012398232,
+   1.1411000014049932,
+   2.3336000012932345,
+   1.5418000002682675,
+   1.1899000019184314
+  ],
+  "transfer_ms": [
+   0.11309999899822287,
+   0.2958000004582573,
+   0.08350000280188397,
+   0.0824999988253694,
+   0.08179999713320285,
+   0.10599999950500205,
+   0.08329999764100648,
+   0.08209999941755086
+  ],
+  "encrypt_ms": [
+   0.0565,
+   0.0431,
+   0.0344,
+   0.0256,
+   0.0245,
+   0.0465,
+   0.0271,
+   0.0244
+  ],
+  "decrypt_ms": [
+   0.0524,
+   0.1931,
+   0.0239,
+   0.0227,
+   0.0227,
+   0.0375,
+   0.0232,
+   0.0225
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01855,
+   "client_kem_decaps": 0.00595,
+   "client_kem_keygen": 0.00955,
+   "client_sign": 0.012549999999999999,
+   "client_verify": 0.008,
+   "server_hkdf": 0.009049999999999999,
+   "server_kem_encaps": 0.010350000000000002,
+   "server_sign": 0.0052,
+   "server_verify": 0.01145
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 102421,
+  "bytes_total": 111564,
+  "payload_bytes": 102400,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 1320.0,
+  "base_rss_kb": 28120.0,
+  "tracemalloc_peak_kb": 1160.7841796875,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "B",
+  "param_set": "pqc-L3",
+  "payload": "10MB",
+  "handshake_ms": [
+   4.223899999487912,
+   4.862399997364264,
+   4.584300000715302
+  ],
+  "transfer_ms": [
+   28.65159999782918,
+   29.12060000016936,
+   28.660299998591654
+  ],
+  "encrypt_ms": [
+   6.1717,
+   5.6412,
+   5.5918
+  ],
+  "decrypt_ms": [
+   5.105,
+   5.3146,
+   5.4113
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0338,
+   "client_kem_decaps": 0.0066,
+   "client_kem_keygen": 0.017,
+   "client_sign": 0.0189,
+   "client_verify": 0.0094,
+   "server_hkdf": 0.0123,
+   "server_kem_encaps": 0.0144,
+   "server_sign": 0.0055,
+   "server_verify": 0.0137
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 10485970,
+  "bytes_total": 10495113,
+  "payload_bytes": 10485760,
+  "n_records": 11,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 5440.0,
+  "base_rss_kb": 28032.0,
+  "tracemalloc_peak_kb": 6161.0751953125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "B",
+  "param_set": "hybrid-L3",
+  "payload": "1KB",
+  "handshake_ms": [
+   1.4223000034689903,
+   2.555000002757879,
+   1.653699997405056,
+   1.4402999986486975,
+   1.7223000031663105,
+   1.4637000022048596,
+   1.367600001685787,
+   1.4081000008445699,
+   1.4259999989008065,
+   3.9089000019885134,
+   1.5045000000100117,
+   1.5774999992572702
+  ],
+  "transfer_ms": [
+   0.013299999409355223,
+   0.015300000086426735,
+   0.01170000177808106,
+   0.011199997970834374,
+   0.011699998140102252,
+   0.011099997209385037,
+   0.015499997971346602,
+   0.010799998563015833,
+   0.010700001439545304,
+   0.012399999832268804,
+   0.01809999957913533,
+   0.012300002708798274
+  ],
+  "encrypt_ms": [
+   0.0087,
+   0.0179,
+   0.0077,
+   0.007,
+   0.0074,
+   0.0071,
+   0.0072,
+   0.0071,
+   0.0084,
+   0.0123,
+   0.0074,
+   0.0103
+  ],
+  "decrypt_ms": [
+   0.0104,
+   0.009,
+   0.0059,
+   0.0058,
+   0.0059,
+   0.0058,
+   0.0107,
+   0.0055,
+   0.0065,
+   0.0069,
+   0.0057,
+   0.0071
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.013600000000000001,
+   "client_kem_decaps": 0.0984,
+   "client_kem_keygen": 0.063,
+   "client_sign": 0.01175,
+   "client_verify": 0.00835,
+   "server_hkdf": 0.0056500000000000005,
+   "server_kem_encaps": 0.13085,
+   "server_sign": 0.0056,
+   "server_verify": 0.0112
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 1045,
+  "bytes_total": 10329,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 1144.0,
+  "base_rss_kb": 29348.0,
+  "tracemalloc_peak_kb": 1061.595703125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "B",
+  "param_set": "hybrid-L3",
+  "payload": "100KB",
+  "handshake_ms": [
+   2.3411999973177444,
+   1.6858999988471624,
+   1.617699999769684,
+   1.6389000011258759,
+   1.894099998025922,
+   1.9162999997206498,
+   2.415599999949336,
+   1.9455999972706195
+  ],
+  "transfer_ms": [
+   0.12910000077681616,
+   0.09960000170394778,
+   0.08350000280188397,
+   0.08759999764151871,
+   0.08710000111022964,
+   0.1128999974753242,
+   0.08630000229459256,
+   0.08750000051804818
+  ],
+  "encrypt_ms": [
+   0.0662,
+   0.0283,
+   0.0272,
+   0.0265,
+   0.0273,
+   0.0425,
+   0.0311,
+   0.0277
+  ],
+  "decrypt_ms": [
+   0.0822,
+   0.039,
+   0.0263,
+   0.0283,
+   0.0264,
+   0.0404,
+   0.028,
+   0.0269
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01375,
+   "client_kem_decaps": 0.09839999999999999,
+   "client_kem_keygen": 0.0667,
+   "client_sign": 0.01255,
+   "client_verify": 0.008549999999999999,
+   "server_hkdf": 0.0059,
+   "server_kem_encaps": 0.13395,
+   "server_sign": 0.006,
+   "server_verify": 0.011550000000000001
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 102421,
+  "bytes_total": 111705,
+  "payload_bytes": 102400,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 1372.0,
+  "base_rss_kb": 29316.0,
+  "tracemalloc_peak_kb": 1160.978515625,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "B",
+  "param_set": "hybrid-L3",
+  "payload": "10MB",
+  "handshake_ms": [
+   3.4531000019342173,
+   5.8873000016319565,
+   6.005899998854147
+  ],
+  "transfer_ms": [
+   24.874299997463822,
+   26.242500000080327,
+   25.69690000018454
+  ],
+  "encrypt_ms": [
+   4.88,
+   5.9648,
+   5.5177
+  ],
+  "decrypt_ms": [
+   4.3854,
+   4.5877,
+   4.4639
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0225,
+   "client_kem_decaps": 0.1089,
+   "client_kem_keygen": 0.1137,
+   "client_sign": 0.0189,
+   "client_verify": 0.0097,
+   "server_hkdf": 0.0066,
+   "server_kem_encaps": 0.1644,
+   "server_sign": 0.007,
+   "server_verify": 0.014
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 10485970,
+  "bytes_total": 10495254,
+  "payload_bytes": 10485760,
+  "n_records": 11,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 6200.0,
+  "base_rss_kb": 29068.0,
+  "tracemalloc_peak_kb": 6161.0751953125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "C",
+  "param_set": "classical-p256",
+  "payload": "1KB",
+  "handshake_ms": [
+   1.1529000003065448,
+   1.5645999992557336,
+   1.949500001501292,
+   9.851899998466251,
+   4.755900001327973,
+   2.514899999368936,
+   2.233499999420019,
+   2.7652999997371808,
+   2.062700001260964,
+   2.65650000073947,
+   2.1316999991540797,
+   2.7850999977090396
+  ],
+  "transfer_ms": [
+   0.015500001609325409,
+   0.01790000169421546,
+   0.013699998817173764,
+   0.0259000007645227,
+   0.035400000342633575,
+   0.028200000087963417,
+   0.025899997126543894,
+   0.018300001102034003,
+   0.01979999797185883,
+   0.02350000067963265,
+   0.029000002541579306,
+   0.02809999932651408
+  ],
+  "encrypt_ms": [
+   0.0077,
+   0.0094,
+   0.0122,
+   0.0152,
+   0.0325,
+   0.0127,
+   0.0141,
+   0.0106,
+   0.0166,
+   0.0154,
+   0.0154,
+   0.0259
+  ],
+  "decrypt_ms": [
+   0.0068,
+   0.0095,
+   0.0072,
+   0.0122,
+   0.0257,
+   0.0141,
+   0.0137,
+   0.0092,
+   0.0131,
+   0.0122,
+   0.0159,
+   0.0175
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0207,
+   "client_kem_decaps": 0.13265,
+   "client_kem_keygen": 0.1414,
+   "client_sign": 0.15084999999999998,
+   "client_verify": 0.12345,
+   "server_hkdf": 0.010499999999999999,
+   "server_kem_encaps": 0.2101,
+   "server_sign": 0.1013,
+   "server_verify": 0.14525
+  },
+  "sizes": {
+   "size_client_hello": 229,
+   "size_kem_pk": 65,
+   "size_sig_client": 71,
+   "size_server_hello": 183,
+   "size_kem_ct": 65,
+   "size_sig_server": 70
+  },
+  "bytes_handshake": 526,
+  "bytes_records": 1045,
+  "bytes_total": 1571,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 124.0,
+  "base_rss_kb": 29680.0,
+  "tracemalloc_peak_kb": 34.2119140625,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "C",
+  "param_set": "classical-p256",
+  "payload": "100KB",
+  "handshake_ms": [
+   3.799400001298636,
+   1.695099999778904,
+   1.3638000018545426,
+   1.3238999999884982,
+   1.2635999992198776,
+   1.2499000004027039,
+   1.214099997014273,
+   1.845599999796832
+  ],
+  "transfer_ms": [
+   0.23710000095888972,
+   0.15100000018719584,
+   0.14430000010179356,
+   0.1413000027241651,
+   0.13350000153877772,
+   0.14460000238614157,
+   0.14350000128615648,
+   0.17279999883612618
+  ],
+  "encrypt_ms": [
+   0.1099,
+   0.0513,
+   0.0341,
+   0.0407,
+   0.0337,
+   0.0306,
+   0.031,
+   0.0397
+  ],
+  "decrypt_ms": [
+   0.063,
+   0.0341,
+   0.033,
+   0.0321,
+   0.0305,
+   0.0321,
+   0.0331,
+   0.0431
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0106,
+   "client_kem_decaps": 0.0848,
+   "client_kem_keygen": 0.061,
+   "client_sign": 0.07465,
+   "client_verify": 0.07944999999999999,
+   "server_hkdf": 0.0059,
+   "server_kem_encaps": 0.1047,
+   "server_sign": 0.057999999999999996,
+   "server_verify": 0.0887
+  },
+  "sizes": {
+   "size_client_hello": 229,
+   "size_kem_pk": 65,
+   "size_sig_client": 71,
+   "size_server_hello": 183,
+   "size_kem_ct": 65,
+   "size_sig_server": 70
+  },
+  "bytes_handshake": 526,
+  "bytes_records": 102547,
+  "bytes_total": 103073,
+  "payload_bytes": 102400,
+  "n_records": 8,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 136.0,
+  "base_rss_kb": 29680.0,
+  "tracemalloc_peak_kb": 65.87109375,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "C",
+  "param_set": "classical-p256",
+  "payload": "10MB",
+  "handshake_ms": [
+   2.7148999979544897,
+   4.1352000007464085,
+   3.100300000369316
+  ],
+  "transfer_ms": [
+   42.67030000119121,
+   48.99479999949108,
+   56.41710000054445
+  ],
+  "encrypt_ms": [
+   3.3571,
+   4.3467,
+   4.3497
+  ],
+  "decrypt_ms": [
+   4.4642,
+   5.891,
+   4.5884
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0254,
+   "client_kem_decaps": 0.1538,
+   "client_kem_keygen": 0.2152,
+   "client_sign": 0.2285,
+   "client_verify": 0.1472,
+   "server_hkdf": 0.0164,
+   "server_kem_encaps": 0.1686,
+   "server_sign": 0.1548,
+   "server_verify": 0.163
+  },
+  "sizes": {
+   "size_client_hello": 229,
+   "size_kem_pk": 65,
+   "size_sig_client": 71,
+   "size_server_hello": 185,
+   "size_kem_ct": 65,
+   "size_sig_server": 72
+  },
+  "bytes_handshake": 528,
+  "bytes_records": 10499200,
+  "bytes_total": 10499728,
+  "payload_bytes": 10485760,
+  "n_records": 641,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 0.0,
+  "base_rss_kb": 29816.0,
+  "tracemalloc_peak_kb": 113.166015625,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "C",
+  "param_set": "pqc-L3",
+  "payload": "1KB",
+  "handshake_ms": [
+   0.7032000030449126,
+   0.6223000018508174,
+   0.7189999996626284,
+   2.026400001341244,
+   1.2593999999808148,
+   0.9687999991001561,
+   0.6876000006741378,
+   0.8918000021367334,
+   0.6178000003274065,
+   0.5721999987144955,
+   0.5901000004087109,
+   0.5748999974457547
+  ],
+  "transfer_ms": [
+   0.016999998479150236,
+   0.011599997378652915,
+   0.020200001017656177,
+   0.03139999898849055,
+   0.024000000848900527,
+   0.019600000086938962,
+   0.011299998732283711,
+   0.0121000011858996,
+   0.011399999493733048,
+   0.010700001439545304,
+   0.010799998563015833,
+   0.01080000220099464
+  ],
+  "encrypt_ms": [
+   0.0078,
+   0.0068,
+   0.0118,
+   0.0212,
+   0.0181,
+   0.0097,
+   0.0066,
+   0.0096,
+   0.0063,
+   0.0125,
+   0.0059,
+   0.006
+  ],
+  "decrypt_ms": [
+   0.0066,
+   0.0056,
+   0.0114,
+   0.0186,
+   0.0163,
+   0.0093,
+   0.0055,
+   0.0087,
+   0.0055,
+   0.0055,
+   0.0054,
+   0.0064
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01815,
+   "client_kem_decaps": 0.0058,
+   "client_kem_keygen": 0.0116,
+   "client_sign": 0.013000000000000001,
+   "client_verify": 0.0078,
+   "server_hkdf": 0.009649999999999999,
+   "server_kem_encaps": 0.01005,
+   "server_sign": 0.0049,
+   "server_verify": 0.01165
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 1045,
+  "bytes_total": 10188,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 32.0,
+  "base_rss_kb": 28076.0,
+  "tracemalloc_peak_kb": 56.6318359375,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "C",
+  "param_set": "pqc-L3",
+  "payload": "100KB",
+  "handshake_ms": [
+   0.7824000022083055,
+   0.7367999969574157,
+   0.7093999993230682,
+   0.7736000006843824,
+   0.7116999986465089,
+   1.408700001775287,
+   0.9336000002804212,
+   1.1615999974310398
+  ],
+  "transfer_ms": [
+   0.14569999984814785,
+   0.13940000280854292,
+   0.13789999866276048,
+   0.1407999989169184,
+   0.1382000009471085,
+   0.14430000010179356,
+   0.13949999993201345,
+   0.1685999995970633
+  ],
+  "encrypt_ms": [
+   0.037,
+   0.0305,
+   0.0302,
+   0.0537,
+   0.0354,
+   0.0603,
+   0.0358,
+   0.0572
+  ],
+  "decrypt_ms": [
+   0.0329,
+   0.0313,
+   0.0316,
+   0.0349,
+   0.0315,
+   0.0322,
+   0.0324,
+   0.0393
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0157,
+   "client_kem_decaps": 0.0058,
+   "client_kem_keygen": 0.00945,
+   "client_sign": 0.011349999999999999,
+   "client_verify": 0.00735,
+   "server_hkdf": 0.01055,
+   "server_kem_encaps": 0.01025,
+   "server_sign": 0.005,
+   "server_verify": 0.011
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 102547,
+  "bytes_total": 111690,
+  "payload_bytes": 102400,
+  "n_records": 8,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 72.0,
+  "base_rss_kb": 28036.0,
+  "tracemalloc_peak_kb": 84.814453125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "C",
+  "param_set": "pqc-L3",
+  "payload": "10MB",
+  "handshake_ms": [
+   0.930599999264814,
+   1.1173000020789914,
+   2.0021000018459745
+  ],
+  "transfer_ms": [
+   29.762599999230588,
+   28.216999999131076,
+   28.468799999245675
+  ],
+  "encrypt_ms": [
+   2.8571,
+   2.5989,
+   2.9267
+  ],
+  "decrypt_ms": [
+   2.7995,
+   2.9115,
+   2.8206
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.034,
+   "client_kem_decaps": 0.0065,
+   "client_kem_keygen": 0.018,
+   "client_sign": 0.0201,
+   "client_verify": 0.0083,
+   "server_hkdf": 0.0098,
+   "server_kem_encaps": 0.0137,
+   "server_sign": 0.0058,
+   "server_verify": 0.0126
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 10499200,
+  "bytes_total": 10508343,
+  "payload_bytes": 10485760,
+  "n_records": 641,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 0.0,
+  "base_rss_kb": 27900.0,
+  "tracemalloc_peak_kb": 113.158203125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "C",
+  "param_set": "hybrid-L3",
+  "payload": "1KB",
+  "handshake_ms": [
+   0.9876999974949285,
+   0.9241999978257809,
+   1.1094999972556252,
+   1.12749999971129,
+   0.9817999998631421,
+   2.2729000011167955,
+   1.479400001699105,
+   1.3107999984640628,
+   1.0064999987662304,
+   1.0150999987672549,
+   1.0007000018958934,
+   1.1950999978580512
+  ],
+  "transfer_ms": [
+   0.013500000932253897,
+   0.016900001355679706,
+   0.011600001016631722,
+   0.012299999070819467,
+   0.011899999663000926,
+   0.018300001102034003,
+   0.3270999986852985,
+   0.01300000076298602,
+   0.01170000177808106,
+   0.010900002962443978,
+   0.017499998648418114,
+   0.010900002962443978
+  ],
+  "encrypt_ms": [
+   0.0083,
+   0.0269,
+   0.0068,
+   0.0073,
+   0.0065,
+   0.0112,
+   0.0104,
+   0.0072,
+   0.0066,
+   0.0069,
+   0.0066,
+   0.019
+  ],
+  "decrypt_ms": [
+   0.0071,
+   0.0077,
+   0.0058,
+   0.0061,
+   0.0056,
+   0.0091,
+   0.0145,
+   0.006,
+   0.0057,
+   0.0057,
+   0.0098,
+   0.0051
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01235,
+   "client_kem_decaps": 0.09440000000000001,
+   "client_kem_keygen": 0.07039999999999999,
+   "client_sign": 0.012050000000000002,
+   "client_verify": 0.00805,
+   "server_hkdf": 0.0056,
+   "server_kem_encaps": 0.12905,
+   "server_sign": 0.00575,
+   "server_verify": 0.01235
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 1045,
+  "bytes_total": 10329,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 132.0,
+  "base_rss_kb": 29236.0,
+  "tracemalloc_peak_kb": 57.6171875,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "C",
+  "param_set": "hybrid-L3",
+  "payload": "100KB",
+  "handshake_ms": [
+   1.9797999993897974,
+   1.336299999820767,
+   1.4028999976289924,
+   1.194000000396045,
+   1.0929000018222723,
+   1.1736000014934689,
+   2.5862999973469414,
+   1.6410999996878672
+  ],
+  "transfer_ms": [
+   0.1722999986668583,
+   0.18289999934495427,
+   0.15490000077988952,
+   0.18699999782256782,
+   0.1702999979897868,
+   0.16820000018924475,
+   0.1762000028975308,
+   0.1703000016277656
+  ],
+  "encrypt_ms": [
+   0.0575,
+   0.0354,
+   0.0393,
+   0.0381,
+   0.0306,
+   0.0301,
+   0.0661,
+   0.048
+  ],
+  "decrypt_ms": [
+   0.0394,
+   0.0375,
+   0.0352,
+   0.0505,
+   0.0417,
+   0.0358,
+   0.0482,
+   0.0395
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01535,
+   "client_kem_decaps": 0.1175,
+   "client_kem_keygen": 0.0746,
+   "client_sign": 0.0125,
+   "client_verify": 0.00975,
+   "server_hkdf": 0.0063,
+   "server_kem_encaps": 0.14495000000000002,
+   "server_sign": 0.0064,
+   "server_verify": 0.0124
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 102547,
+  "bytes_total": 111831,
+  "payload_bytes": 102400,
+  "n_records": 8,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 116.0,
+  "base_rss_kb": 29280.0,
+  "tracemalloc_peak_kb": 85.2587890625,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "C",
+  "param_set": "hybrid-L3",
+  "payload": "10MB",
+  "handshake_ms": [
+   1.4690999996673781,
+   1.4876000022923108,
+   1.9100999998045154
+  ],
+  "transfer_ms": [
+   30.461500002274988,
+   27.750299999752315,
+   30.017199998837896
+  ],
+  "encrypt_ms": [
+   2.7112,
+   2.7616,
+   2.4833
+  ],
+  "decrypt_ms": [
+   3.3054,
+   2.7116,
+   2.7572
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0226,
+   "client_kem_decaps": 0.1124,
+   "client_kem_keygen": 0.1132,
+   "client_sign": 0.0179,
+   "client_verify": 0.011,
+   "server_hkdf": 0.0073,
+   "server_kem_encaps": 0.1742,
+   "server_sign": 0.0078,
+   "server_verify": 0.0139
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 10499200,
+  "bytes_total": 10508484,
+  "payload_bytes": 10485760,
+  "n_records": 641,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 128.0,
+  "base_rss_kb": 29292.0,
+  "tracemalloc_peak_kb": 113.158203125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "D",
+  "param_set": "classical-p256",
+  "payload": "1KB",
+  "handshake_ms": [
+   1.1053000016545411,
+   1.0571999991952907,
+   2.2459000028902665,
+   1.4943999995011836,
+   1.2277999994694255,
+   1.101800000469666,
+   1.235100000485545,
+   1.0559000002103858,
+   1.003000001219334,
+   1.0234000001219101,
+   1.063899999280693,
+   1.0521000003791414
+  ],
+  "transfer_ms": [
+   0.016999998479150236,
+   0.017899998056236655,
+   0.014900000678608194,
+   0.015300000086426735,
+   0.019899998733308166,
+   0.013599998055724427,
+   0.015399997209897265,
+   0.011400003131711856,
+   0.013600001693703234,
+   0.011600001016631722,
+   0.011600001016631722,
+   0.01179999890155159
+  ],
+  "encrypt_ms": [
+   0.0083,
+   0.0067,
+   0.0104,
+   0.01,
+   0.0073,
+   0.0065,
+   0.0128,
+   0.0064,
+   0.0146,
+   0.0065,
+   0.0065,
+   0.0061
+  ],
+  "decrypt_ms": [
+   0.0067,
+   0.0102,
+   0.0072,
+   0.0078,
+   0.0083,
+   0.0062,
+   0.012,
+   0.0057,
+   0.0057,
+   0.0061,
+   0.0062,
+   0.006
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0093,
+   "client_kem_decaps": 0.0774,
+   "client_kem_keygen": 0.04945,
+   "client_sign": 0.06755,
+   "client_verify": 0.0723,
+   "server_hkdf": 0.0052499999999999995,
+   "server_kem_encaps": 0.0979,
+   "server_sign": 0.0527,
+   "server_verify": 0.08265
+  },
+  "sizes": {
+   "size_client_hello": 229,
+   "size_kem_pk": 65,
+   "size_sig_client": 71,
+   "size_server_hello": 183,
+   "size_kem_ct": 65,
+   "size_sig_server": 70
+  },
+  "bytes_handshake": 526,
+  "bytes_records": 1045,
+  "bytes_total": 1571,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 176.0,
+  "base_rss_kb": 29696.0,
+  "tracemalloc_peak_kb": 82.2119140625,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "D",
+  "param_set": "classical-p256",
+  "payload": "100KB",
+  "handshake_ms": [
+   1.3408000013441779,
+   1.202800001919968,
+   1.3634999995701946,
+   2.8678000016952865,
+   1.4140999992378056,
+   1.3145999982953072,
+   1.1358000010659453,
+   1.1320999983581714
+  ],
+  "transfer_ms": [
+   0.13449999823933467,
+   0.11319999975967221,
+   0.13949999993201345,
+   0.12559999959194101,
+   0.13780000153928995,
+   0.1444000008632429,
+   0.11330000052112155,
+   0.12029999925289303
+  ],
+  "encrypt_ms": [
+   0.0583,
+   0.0429,
+   0.0294,
+   0.0555,
+   0.0452,
+   0.0475,
+   0.0292,
+   0.0563
+  ],
+  "decrypt_ms": [
+   0.0512,
+   0.0275,
+   0.0276,
+   0.0336,
+   0.029,
+   0.0287,
+   0.0259,
+   0.0285
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.010249999999999999,
+   "client_kem_decaps": 0.078,
+   "client_kem_keygen": 0.0586,
+   "client_sign": 0.07214999999999999,
+   "client_verify": 0.07285,
+   "server_hkdf": 0.00515,
+   "server_kem_encaps": 0.09815,
+   "server_sign": 0.0559,
+   "server_verify": 0.0862
+  },
+  "sizes": {
+   "size_client_hello": 229,
+   "size_kem_pk": 65,
+   "size_sig_client": 71,
+   "size_server_hello": 184,
+   "size_kem_ct": 65,
+   "size_sig_server": 71
+  },
+  "bytes_handshake": 527,
+  "bytes_records": 102442,
+  "bytes_total": 102969,
+  "payload_bytes": 102400,
+  "n_records": 3,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 256.0,
+  "base_rss_kb": 29656.0,
+  "tracemalloc_peak_kb": 181.84375,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "D",
+  "param_set": "classical-p256",
+  "payload": "10MB",
+  "handshake_ms": [
+   1.3322000013431534,
+   1.5525000017078128,
+   1.9896000012522563
+  ],
+  "transfer_ms": [
+   20.81949999774224,
+   18.154400000639725,
+   20.3650999974343
+  ],
+  "encrypt_ms": [
+   2.4407,
+   1.9996,
+   1.957
+  ],
+  "decrypt_ms": [
+   2.5209,
+   2.1153,
+   2.047
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0138,
+   "client_kem_decaps": 0.0825,
+   "client_kem_keygen": 0.101,
+   "client_sign": 0.1084,
+   "client_verify": 0.0775,
+   "server_hkdf": 0.0062,
+   "server_kem_encaps": 0.1095,
+   "server_sign": 0.0629,
+   "server_verify": 0.0964
+  },
+  "sizes": {
+   "size_client_hello": 229,
+   "size_kem_pk": 65,
+   "size_sig_client": 71,
+   "size_server_hello": 184,
+   "size_kem_ct": 65,
+   "size_sig_server": 71
+  },
+  "bytes_handshake": 527,
+  "bytes_records": 10489120,
+  "bytes_total": 10489647,
+  "payload_bytes": 10485760,
+  "n_records": 161,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 0.0,
+  "base_rss_kb": 29740.0,
+  "tracemalloc_peak_kb": 401.0830078125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "D",
+  "param_set": "pqc-L3",
+  "payload": "1KB",
+  "handshake_ms": [
+   0.7076000001688953,
+   0.6216000001586508,
+   0.6166000021039508,
+   0.987600000371458,
+   0.6869999997434206,
+   0.8242000003519934,
+   1.0628999989421573,
+   0.6098000012570992,
+   0.6151999987196177,
+   0.6486000020231586,
+   0.5954000007477589,
+   0.5767000002379064
+  ],
+  "transfer_ms": [
+   0.014999997802078724,
+   0.012299999070819467,
+   0.011999996786471456,
+   0.016199999663513154,
+   0.012200001947348937,
+   0.029400001949397847,
+   0.014100001862971112,
+   0.010700001439545304,
+   0.011200001608813182,
+   0.011000000085914508,
+   0.010600000678095967,
+   0.011399999493733048
+  ],
+  "encrypt_ms": [
+   0.0088,
+   0.0067,
+   0.0066,
+   0.0108,
+   0.0087,
+   0.0087,
+   0.0073,
+   0.0061,
+   0.0061,
+   0.0061,
+   0.0059,
+   0.0061
+  ],
+  "decrypt_ms": [
+   0.0099,
+   0.0057,
+   0.0057,
+   0.0088,
+   0.0069,
+   0.0126,
+   0.0083,
+   0.0057,
+   0.0059,
+   0.0058,
+   0.0055,
+   0.0056
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01635,
+   "client_kem_decaps": 0.0057,
+   "client_kem_keygen": 0.008,
+   "client_sign": 0.011349999999999999,
+   "client_verify": 0.00785,
+   "server_hkdf": 0.0060999999999999995,
+   "server_kem_encaps": 0.00975,
+   "server_sign": 0.00455,
+   "server_verify": 0.01085
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 1045,
+  "bytes_total": 10188,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 80.0,
+  "base_rss_kb": 28108.0,
+  "tracemalloc_peak_kb": 101.1513671875,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "D",
+  "param_set": "pqc-L3",
+  "payload": "100KB",
+  "handshake_ms": [
+   0.7812999974703416,
+   0.6874999999126885,
+   1.326999998127576,
+   0.8495000001857989,
+   1.1684999990393408,
+   0.9497000028204639,
+   0.6826000026194379,
+   0.9608999971533194
+  ],
+  "transfer_ms": [
+   0.13750000289292075,
+   0.10239999755867757,
+   0.10820000170497224,
+   0.10259999908157624,
+   0.1053000014508143,
+   0.11629999789875001,
+   0.10509999992791563,
+   0.09330000102636404
+  ],
+  "encrypt_ms": [
+   0.0567,
+   0.0395,
+   0.0475,
+   0.0364,
+   0.0425,
+   0.0395,
+   0.0277,
+   0.0258
+  ],
+  "decrypt_ms": [
+   0.0591,
+   0.0253,
+   0.0268,
+   0.0252,
+   0.027,
+   0.0259,
+   0.027,
+   0.0451
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.02265,
+   "client_kem_decaps": 0.00705,
+   "client_kem_keygen": 0.009850000000000001,
+   "client_sign": 0.01325,
+   "client_verify": 0.00945,
+   "server_hkdf": 0.011099999999999999,
+   "server_kem_encaps": 0.01295,
+   "server_sign": 0.0062,
+   "server_verify": 0.01195
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 102442,
+  "bytes_total": 111585,
+  "payload_bytes": 102400,
+  "n_records": 3,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 172.0,
+  "base_rss_kb": 28068.0,
+  "tracemalloc_peak_kb": 200.783203125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "D",
+  "param_set": "pqc-L3",
+  "payload": "10MB",
+  "handshake_ms": [
+   0.7912000000942498,
+   1.1150999998790212,
+   1.1288999994576443
+  ],
+  "transfer_ms": [
+   20.49819999956526,
+   18.68119999926421,
+   20.342000003438443
+  ],
+  "encrypt_ms": [
+   2.2179,
+   2.1978,
+   2.2169
+  ],
+  "decrypt_ms": [
+   2.2975,
+   2.1093,
+   2.258
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0356,
+   "client_kem_decaps": 0.0075,
+   "client_kem_keygen": 0.0144,
+   "client_sign": 0.02,
+   "client_verify": 0.0084,
+   "server_hkdf": 0.0062,
+   "server_kem_encaps": 0.0144,
+   "server_sign": 0.0056,
+   "server_verify": 0.0149
+  },
+  "sizes": {
+   "size_client_hello": 4584,
+   "size_kem_pk": 1184,
+   "size_sig_client": 3309,
+   "size_server_hello": 4445,
+   "size_kem_ct": 1088,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9143,
+  "bytes_records": 10489120,
+  "bytes_total": 10498263,
+  "payload_bytes": 10485760,
+  "n_records": 161,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 0.0,
+  "base_rss_kb": 28064.0,
+  "tracemalloc_peak_kb": 401.0751953125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "D",
+  "param_set": "hybrid-L3",
+  "payload": "1KB",
+  "handshake_ms": [
+   0.9551000002829824,
+   0.9079000010387972,
+   1.3152999999874737,
+   1.2052999991283286,
+   1.3812000033794902,
+   1.2262000018381514,
+   1.0830999999598134,
+   1.0298000015609432,
+   0.903299998753937,
+   0.8631999990029726,
+   0.8415000011154916,
+   0.8712000017112587
+  ],
+  "transfer_ms": [
+   0.013500000932253897,
+   0.0121000011858996,
+   0.014299999747890979,
+   0.013900000340072438,
+   0.012599997717188671,
+   0.016499998309882358,
+   0.015400000847876072,
+   0.013900000340072438,
+   0.01089999932446517,
+   0.011300002370262519,
+   0.012299999070819467,
+   0.011200001608813182
+  ],
+  "encrypt_ms": [
+   0.0082,
+   0.0062,
+   0.0077,
+   0.012,
+   0.0087,
+   0.0105,
+   0.0071,
+   0.0069,
+   0.006,
+   0.0067,
+   0.0066,
+   0.0064
+  ],
+  "decrypt_ms": [
+   0.0069,
+   0.0059,
+   0.0066,
+   0.0109,
+   0.0066,
+   0.0202,
+   0.0081,
+   0.006,
+   0.0055,
+   0.0061,
+   0.0058,
+   0.0055
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.01235,
+   "client_kem_decaps": 0.09540000000000001,
+   "client_kem_keygen": 0.05975,
+   "client_sign": 0.01175,
+   "client_verify": 0.0081,
+   "server_hkdf": 0.006,
+   "server_kem_encaps": 0.13005,
+   "server_sign": 0.0052,
+   "server_verify": 0.01095
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 1045,
+  "bytes_total": 10329,
+  "payload_bytes": 1024,
+  "n_records": 2,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 184.0,
+  "base_rss_kb": 29224.0,
+  "tracemalloc_peak_kb": 101.595703125,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "D",
+  "param_set": "hybrid-L3",
+  "payload": "100KB",
+  "handshake_ms": [
+   2.1386000007623807,
+   1.1677999973471742,
+   0.97730000197771,
+   1.2771000001521315,
+   0.9845999993558507,
+   1.019899998937035,
+   0.9583999999449588,
+   0.9394999979122076
+  ],
+  "transfer_ms": [
+   0.12970000170753337,
+   0.11380000069038942,
+   0.12379999679978937,
+   0.10139999722014181,
+   0.10370000018156134,
+   0.1007999999274034,
+   0.1143000008596573,
+   2.0432000019354746
+  ],
+  "encrypt_ms": [
+   0.0613,
+   0.0433,
+   0.027,
+   0.0415,
+   0.0393,
+   0.0304,
+   0.0582,
+   0.0353
+  ],
+  "decrypt_ms": [
+   0.0254,
+   0.0317,
+   0.0318,
+   0.0307,
+   0.0272,
+   0.0442,
+   0.0266,
+   1.8398
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0128,
+   "client_kem_decaps": 0.0968,
+   "client_kem_keygen": 0.06255,
+   "client_sign": 0.012,
+   "client_verify": 0.0078,
+   "server_hkdf": 0.005350000000000001,
+   "server_kem_encaps": 0.12525,
+   "server_sign": 0.005549999999999999,
+   "server_verify": 0.0109
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 102442,
+  "bytes_total": 111726,
+  "payload_bytes": 102400,
+  "n_records": 3,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 224.0,
+  "base_rss_kb": 29228.0,
+  "tracemalloc_peak_kb": 201.2275390625,
+  "cpu_affinity": [
+   0
+  ]
+ },
+ {
+  "platform": "D",
+  "param_set": "hybrid-L3",
+  "payload": "10MB",
+  "handshake_ms": [
+   1.223200000822544,
+   1.146599999628961,
+   2.332899999601068
+  ],
+  "transfer_ms": [
+   19.078799999988405,
+   20.06420000179787,
+   22.16459999908693
+  ],
+  "encrypt_ms": [
+   2.2607,
+   2.2178,
+   2.2473
+  ],
+  "decrypt_ms": [
+   2.5101,
+   2.3769,
+   3.3061
+  ],
+  "phase_ms": {
+   "client_hkdf": 0.0201,
+   "client_kem_decaps": 0.1058,
+   "client_kem_keygen": 0.1095,
+   "client_sign": 0.018,
+   "client_verify": 0.0106,
+   "server_hkdf": 0.0106,
+   "server_kem_encaps": 0.1604,
+   "server_sign": 0.006,
+   "server_verify": 0.0125
+  },
+  "sizes": {
+   "size_client_hello": 4660,
+   "size_kem_pk": 1249,
+   "size_sig_client": 3309,
+   "size_server_hello": 4510,
+   "size_kem_ct": 1153,
+   "size_sig_server": 3309
+  },
+  "bytes_handshake": 9284,
+  "bytes_records": 10489120,
+  "bytes_total": 10498404,
+  "payload_bytes": 10485760,
+  "n_records": 161,
+  "handshake_ok": true,
+  "payload_ok": true,
+  "errors": [],
+  "peak_rss_delta_kb": 460.0,
+  "base_rss_kb": 29292.0,
+  "tracemalloc_peak_kb": 401.0751953125,
+  "cpu_affinity": [
+   0
+  ]
+ }
+]

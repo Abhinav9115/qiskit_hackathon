@@ -1,0 +1,25 @@
+workload,processor,logical_2q_gates,swaps_estimate,cx_estimate,method
+GHZ-5 (chain CX),Processor A,4,0,4,"identity layout, nearest-neighbor chain"
+GHZ-5 (star CX from q0),Processor A,4,3,13,"identity layout, nearest-neighbor chain"
+"Toffoli decomposition (q0,q1->q2)",Processor A,5,3,14,"identity layout, nearest-neighbor chain"
+All-to-all 5 qubits (QFT-like),Processor A,10,12,46,"identity layout, nearest-neighbor chain"
+GHZ-5 (chain CX),Processor B,4,1,7,"identity layout, heavy-hex-inspired sparse graph"
+GHZ-5 (star CX from q0),Processor B,4,2,10,"identity layout, heavy-hex-inspired sparse graph"
+"Toffoli decomposition (q0,q1->q2)",Processor B,5,3,14,"identity layout, heavy-hex-inspired sparse graph"
+All-to-all 5 qubits (QFT-like),Processor B,10,7,31,"identity layout, heavy-hex-inspired sparse graph"
+GHZ-5 (chain CX),A - Chain (Baseline),4,0,4,candidate comparison
+GHZ-5 (star CX from q0),A - Chain (Baseline),4,3,13,candidate comparison
+"Toffoli decomposition (q0,q1->q2)",A - Chain (Baseline),5,3,14,candidate comparison
+All-to-all 5 qubits (QFT-like),A - Chain (Baseline),10,12,46,candidate comparison
+GHZ-5 (chain CX),A - Ring (optional candidate),4,0,4,candidate comparison
+GHZ-5 (star CX from q0),A - Ring (optional candidate),4,3,13,candidate comparison
+"Toffoli decomposition (q0,q1->q2)",A - Ring (optional candidate),5,3,14,candidate comparison
+All-to-all 5 qubits (QFT-like),A - Ring (optional candidate),10,7,31,candidate comparison
+GHZ-5 (chain CX),B - Sparse Graph (required),4,1,7,candidate comparison
+GHZ-5 (star CX from q0),B - Sparse Graph (required),4,2,10,candidate comparison
+"Toffoli decomposition (q0,q1->q2)",B - Sparse Graph (required),5,3,14,candidate comparison
+All-to-all 5 qubits (QFT-like),B - Sparse Graph (required),10,7,31,candidate comparison
+GHZ-5 (chain CX),B - 3x3 Grid (optional candidate),4,2,10,candidate comparison
+GHZ-5 (star CX from q0),B - 3x3 Grid (optional candidate),4,2,10,candidate comparison
+"Toffoli decomposition (q0,q1->q2)",B - 3x3 Grid (optional candidate),5,3,14,candidate comparison
+All-to-all 5 qubits (QFT-like),B - 3x3 Grid (optional candidate),10,8,34,candidate comparison

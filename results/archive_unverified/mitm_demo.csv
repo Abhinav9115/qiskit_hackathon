@@ -1,0 +1,36 @@
+param_set,scenario,expected_defence,attack_detected,payload_delivered_intact,detail,pass
+pqc-L3,no attacker (control),handshake + transfer succeed,False,True,none,True
+pqc-L3,attacker swaps client KEM key and re-signs,server rejects client signature,True,False,ConnectionError: peer closed the connection | HandshakeError: client signature invalid - possible man-in-the-middle,True
+pqc-L3,attacker corrupts server KEM ciphertext,client rejects server signature,True,False,HandshakeError: server signature invalid - possible man-in-the-middle | ConnectionError: peer closed the connection,True
+pqc-L3,attacker forges ServerHello with own key,client rejects server signature,True,False,HandshakeError: server signature invalid - possible man-in-the-middle | ConnectionError: peer closed the connection,True
+pqc-L3,attacker flips a bit in an encrypted record,AES-GCM tag check fails,True,False,"RecordError: AES-GCM authentication failed (tampered, replayed or reordered record)",True
+pqc-L3,attacker replays an encrypted record,AES-GCM tag check fails (sequence number),True,False,"RecordError: AES-GCM authentication failed (tampered, replayed or reordered record)",True
+pqc-L3,attacker truncates the stream,stream ends without authenticated final record,True,False,ConnectionError: peer closed the connection,True
+pqc-L1,no attacker (control),handshake + transfer succeed,False,True,none,True
+pqc-L1,attacker swaps client KEM key and re-signs,server rejects client signature,True,False,ConnectionError: peer closed the connection | HandshakeError: client signature invalid - possible man-in-the-middle,True
+pqc-L1,attacker corrupts server KEM ciphertext,client rejects server signature,True,False,HandshakeError: server signature invalid - possible man-in-the-middle | ConnectionError: peer closed the connection,True
+pqc-L1,attacker forges ServerHello with own key,client rejects server signature,True,False,HandshakeError: server signature invalid - possible man-in-the-middle | ConnectionError: peer closed the connection,True
+pqc-L1,attacker flips a bit in an encrypted record,AES-GCM tag check fails,True,False,"RecordError: AES-GCM authentication failed (tampered, replayed or reordered record)",True
+pqc-L1,attacker replays an encrypted record,AES-GCM tag check fails (sequence number),True,False,"RecordError: AES-GCM authentication failed (tampered, replayed or reordered record)",True
+pqc-L1,attacker truncates the stream,stream ends without authenticated final record,True,False,ConnectionError: peer closed the connection,True
+pqc-L5,no attacker (control),handshake + transfer succeed,False,True,none,True
+pqc-L5,attacker swaps client KEM key and re-signs,server rejects client signature,True,False,ConnectionError: peer closed the connection | HandshakeError: client signature invalid - possible man-in-the-middle,True
+pqc-L5,attacker corrupts server KEM ciphertext,client rejects server signature,True,False,HandshakeError: server signature invalid - possible man-in-the-middle | ConnectionError: peer closed the connection,True
+pqc-L5,attacker forges ServerHello with own key,client rejects server signature,True,False,HandshakeError: server signature invalid - possible man-in-the-middle | ConnectionError: peer closed the connection,True
+pqc-L5,attacker flips a bit in an encrypted record,AES-GCM tag check fails,True,False,"RecordError: AES-GCM authentication failed (tampered, replayed or reordered record)",True
+pqc-L5,attacker replays an encrypted record,AES-GCM tag check fails (sequence number),True,False,"RecordError: AES-GCM authentication failed (tampered, replayed or reordered record)",True
+pqc-L5,attacker truncates the stream,stream ends without authenticated final record,True,False,ConnectionError: peer closed the connection,True
+classical-p256,no attacker (control),handshake + transfer succeed,False,True,none,True
+classical-p256,attacker swaps client KEM key and re-signs,server rejects client signature,True,False,ConnectionError: peer closed the connection | HandshakeError: client signature invalid - possible man-in-the-middle,True
+classical-p256,attacker corrupts server KEM ciphertext,client rejects server signature,True,False,HandshakeError: server signature invalid - possible man-in-the-middle | ConnectionError: peer closed the connection,True
+classical-p256,attacker forges ServerHello with own key,client rejects server signature,True,False,HandshakeError: server signature invalid - possible man-in-the-middle | ConnectionError: peer closed the connection,True
+classical-p256,attacker flips a bit in an encrypted record,AES-GCM tag check fails,True,False,"RecordError: AES-GCM authentication failed (tampered, replayed or reordered record)",True
+classical-p256,attacker replays an encrypted record,AES-GCM tag check fails (sequence number),True,False,"RecordError: AES-GCM authentication failed (tampered, replayed or reordered record)",True
+classical-p256,attacker truncates the stream,stream ends without authenticated final record,True,False,ConnectionError: peer closed the connection,True
+hybrid-L3,no attacker (control),handshake + transfer succeed,False,True,none,True
+hybrid-L3,attacker swaps client KEM key and re-signs,server rejects client signature,True,False,ConnectionError: peer closed the connection | HandshakeError: client signature invalid - possible man-in-the-middle,True
+hybrid-L3,attacker corrupts server KEM ciphertext,client rejects server signature,True,False,HandshakeError: server signature invalid - possible man-in-the-middle | ConnectionError: peer closed the connection,True
+hybrid-L3,attacker forges ServerHello with own key,client rejects server signature,True,False,HandshakeError: server signature invalid - possible man-in-the-middle | ConnectionError: peer closed the connection,True
+hybrid-L3,attacker flips a bit in an encrypted record,AES-GCM tag check fails,True,False,"RecordError: AES-GCM authentication failed (tampered, replayed or reordered record)",True
+hybrid-L3,attacker replays an encrypted record,AES-GCM tag check fails (sequence number),True,False,"RecordError: AES-GCM authentication failed (tampered, replayed or reordered record)",True
+hybrid-L3,attacker truncates the stream,stream ends without authenticated final record,True,False,ConnectionError: peer closed the connection,True

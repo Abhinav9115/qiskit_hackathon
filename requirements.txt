@@ -1,0 +1,11 @@
+# Core (PS-P1 secure channel + benchmarks)
+cryptography>=43.0      # HKDF-SHA256, AES-256-GCM, classical P-256 baseline
+liboqs-python>=0.12.0   # ML-KEM / ML-DSA (needs the liboqs C library; see README)
+numpy>=1.26
+pandas>=2.0
+matplotlib>=3.8
+networkx>=3.2
+psutil>=5.9
+# Optional (quantum threat module only; not needed for the core channel)
+# qiskit>=1.2
+# qiskit-aer>=0.15

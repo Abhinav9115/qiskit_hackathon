@@ -1,0 +1,2 @@
+param_set,kem,sig,nist_category,kem_public_key_B,kem_ciphertext_B,shared_secret_B,sig_public_key_B,signature_B,kem_keygen_ms,kem_encaps_ms,kem_decaps_ms,sig_keygen_ms,sign_ms,verify_ms,reps
+classical-p256,ECDH-P-256,ECDSA-P-256,n/a (quantum-vulnerable),65,65,32,65,71,0.0218,0.0715,0.07205,0.02205,0.0415,0.0644,20

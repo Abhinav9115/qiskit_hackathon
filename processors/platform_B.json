@@ -1,0 +1,11 @@
+{
+  "key": "B",
+  "name": "Platform B",
+  "role": "constrained mid-range (small VM / gateway style)",
+  "status": "DEFINED - Track 5 standardized platform specification: Constrained mid-range gateway",
+  "cpu_cores": 1,
+  "mem_budget_mb": 128,
+  "chunk_bytes": 1048576,
+  "param_set": "pqc-L3",
+  "description": "1 CPU core (affinity-pinned); extra memory budget of 128 MB over the process baseline; 1 MiB streaming records."
+}

@@ -1,0 +1,9 @@
+processor,required,qubits,edges,max_degree,avg_degree,diameter,avg_shortest_path,avg_swap_lower_bound_all_pairs,max_swap_lower_bound,fully_connected_pairs_pct
+Processor A (5-qubit chain - required),True,5,4,2,1.6,4,2.0,1.0,3,40.0
+Processor B (9-qubit sparse graph - required),True,9,8,3,1.778,5,2.611,1.611,4,22.2
+Candidate A: Processor A ring (optional candidate),False,5,5,2,2.0,2,1.5,0.5,1,50.0
+Candidate A: Processor A (Star),False,5,4,4,1.6,2,1.6,0.6,1,40.0
+Candidate A: Processor A (T-shape),False,5,4,3,1.6,3,1.8,0.8,2,40.0
+Candidate B: Processor B 3x3 grid (optional candidate),False,9,12,4,2.667,4,2.0,1.0,3,33.3
+Candidate B: Processor B (Ring with Chords),False,9,11,3,2.444,3,1.917,0.917,2,30.6
+Processor C (study only),False,13,18,6,2.769,4,2.308,1.308,3,23.1

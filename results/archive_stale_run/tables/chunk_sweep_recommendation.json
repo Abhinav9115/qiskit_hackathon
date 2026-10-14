@@ -1,0 +1,7 @@
+{
+ "rule": "smallest record size reaching >=90% of best in-budget throughput",
+ "budget_mb": 8,
+ "recommended_chunk_bytes": 65536,
+ "platform_D_json_chunk_bytes": 65536,
+ "match": true
+}

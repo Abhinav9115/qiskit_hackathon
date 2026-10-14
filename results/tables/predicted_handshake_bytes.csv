@@ -1,0 +1,6 @@
+param_set,kem_public_key_B,kem_ciphertext_B,signature_B,client_hello_frame_B,server_hello_frame_B,finished_B,predicted_handshake_bytes
+pqc-L3,1184,1088,3309,4588,4449,106,9143
+pqc-L1,800,768,2420,3315,3240,106,6661
+pqc-L5,1568,1568,4627,6291,6247,106,12644
+classical-p256,65,65,71,233,188,106,527
+hybrid-L3,1249,1153,3309,4664,4514,106,9284

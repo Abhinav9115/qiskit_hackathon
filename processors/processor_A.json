@@ -1,0 +1,45 @@
+{
+  "name": "Processor A (5-qubit chain - required)",
+  "source": "Final QFF Phase 1 Challenge Kit required Processor A architecture",
+  "num_qubits": 5,
+  "topology": "nearest-neighbor chain",
+  "coupling_map": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      4
+    ]
+  ],
+  "bidirectional": true,
+  "basis_gates": [
+    "rz",
+    "sx",
+    "x",
+    "cx"
+  ],
+  "noise": {
+    "type": "challenge_defined",
+    "source": "Challenge Kit section 3.4",
+    "single_qubit_depolarizing": 0.001,
+    "cx_depolarizing": 0.005,
+    "readout_bitflip": 0.01
+  },
+  "benchmark": {
+    "shots": 4096,
+    "transpile_optimization_level": 1,
+    "layout_routing": "SABRE",
+    "seed": 42
+  },
+  "note": "Required Phase 1 Processor A: 5-qubit nearest-neighbor chain, edges 0-1-2-3-4."
+}

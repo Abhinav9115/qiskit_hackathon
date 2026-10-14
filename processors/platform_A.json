@@ -1,0 +1,11 @@
+{
+  "key": "A",
+  "name": "Platform A",
+  "role": "normal laptop environment (resource-rich reference)",
+  "status": "DEFINED - Track 5 standardized platform specification: Laptop reference environment",
+  "cpu_cores": null,
+  "mem_budget_mb": null,
+  "chunk_bytes": null,
+  "param_set": "pqc-L3",
+  "description": "Headline 'laptop' case: all available CPU cores, no memory budget. The whole payload is sent as ONE AES-256-GCM record (no streaming)."
+}

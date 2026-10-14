@@ -1,0 +1,12 @@
+{
+  "status": "pending_verified_pqc_run",
+  "historical_run_was_quick": true,
+  "historical_pqc_backend": "unverified local simulator; native liboqs was unavailable in the saved notebook run",
+  "historical_pqc_results_valid_for_security_or_performance_claims": false,
+  "current_backend_policy": "PQC requires vetted liboqs-python and requested algorithms; no homemade fallback",
+  "required_before_submission": [
+    "run the PQC and hybrid benchmarks with the vetted backend",
+    "record backend provenance and repetition counts",
+    "regenerate tables, figures, and report from the same run"
+  ]
+}
